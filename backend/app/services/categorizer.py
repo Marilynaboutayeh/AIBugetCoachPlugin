@@ -8,17 +8,19 @@ def categorize(merchant: Optional[str], description: Optional[str]) -> str:
     text = f"{merchant or ''} {description or ''}".upper()
 
     rules = [
-        (["UBER", "BOLT", "TAXI"], "Transport"),
-        (["NETFLIX", "SPOTIFY", "ANGHAMI", "OSN", "SHAHID","CHATGPT", "OPENAI"], "Subscriptions"),
-        (["CARREFOUR", "SPINNEYS", "HAPPY", "TOTERS", "NOKNOK", "GROCER", "MARKET", "SUPERMARKET"], "Groceries"),
-        (["ZARA", "H&M", "BERSHKA", "STRADIVARIUS", "NIKE", "ADIDAS"], "Shopping"),
-        (["MCDONALD","BURGER KING", "KFC", "PIZZA", "RESTAURANT", "CAFE", "STARBUCKS"], "Food & Drink"),
-        (["PHARM", "HOSPITAL", "CLINIC"], "Health"),
-        (["ELECTRIC", "WATER", "INTERNET", "MOBILE", "OGERO"], "Bills"),
-    ]
+    (["NETFLIX", "SUBSCRIPTION", "SPOTIFY", "ANGHAMI", "OSN", "SHAHID", "CHATGPT", "OPENAI"], "Subscriptions"),
+    (["UBER", "BOLT", "TAXI"], "Travel"),
+    (["CARREFOUR", "SPINNEYS", "TOTERS", "NOKNOK", "GROCERY", "SUPERMARKET"], "Groceries"),
+    (["ZARA", "AZADEA", "H&M", "BERSHKA", "STRADIVARIUS", "NIKE", "ADIDAS"], "Shopping Online"),
+    (["MCDONALD", "BURGER KING", "KFC", "PIZZA", "RESTAURANT", "CAFE", "STARBUCKS"], "Food and Drink"),
+    (["PHARM", "HOSPITAL", "CLINIC"], "Health"),
+    (["ELECTRIC", "WATER", "INTERNET", "MOBILE", "OGERO", "TOUCH", "ALFA", "EDL"], "Bills"),
+    (["OMT", "WHISH", "WESTERN UNION"], "Transfers"),
+]
 
     for keywords, category in rules:
         if any(k in text for k in keywords):
             return category
 
     return "Other"
+
