@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends
-from pydantic import BaseModel, Field
-from typing import List, Literal, Optional
 from datetime import datetime
+from typing import List, Literal, Optional
 
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
@@ -13,14 +13,17 @@ router = APIRouter(prefix="/v1", tags=["transactions"])
 
 
 class TransactionIn(BaseModel):
-    user_id: str = Field(..., example="user_123")
-    transaction_id: str = Field(..., example="tx_001")
-    timestamp: datetime
-    amount: float
-    currency: str = Field(..., example="USD")
-    direction: Literal["debit", "credit"]
-    merchant: Optional[str] = None
-    description: Optional[str] = None
+    merchant_description: str = Field(..., example="Carrefour Beirut")
+    mcc: str = Field(..., example="5411")
+    city: str = Field(..., example="Beirut")
+    country: str = Field(..., example="LB")
+
+    user_id: Optional[str] = Field(None, example="user_123")
+    transaction_id: Optional[str] = Field(None, example="tx_001")
+    timestamp: Optional[datetime] = None
+    amount: Optional[float] = None
+    currency: Optional[str] = Field(None, example="USD")
+    direction: Optional[Literal["debit", "credit"]] = None
 
 
 class IngestResponse(BaseModel):
@@ -35,16 +38,25 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
     rejected = 0
 
     for tx in transactions:
-        exists = (
-            db.query(Transaction)
-            .filter(Transaction.user_id == tx.user_id, Transaction.transaction_id == tx.transaction_id)
-            .first()
-        )
-        if exists:
-            rejected += 1
-            continue
+        if tx.user_id and tx.transaction_id:
+            exists = (
+                db.query(Transaction)
+                .filter(
+                    Transaction.user_id == tx.user_id,
+                    Transaction.transaction_id == tx.transaction_id
+                )
+                .first()
+            )
+            if exists:
+                rejected += 1
+                continue
 
-        cat = categorize(tx.merchant, tx.description)
+        cat = categorize(
+            merchant_description=tx.merchant_description,
+            mcc=tx.mcc,
+            city=tx.city,
+            country=tx.country,
+        )
 
         db.add(
             Transaction(
@@ -54,9 +66,18 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
                 amount=tx.amount,
                 currency=tx.currency,
                 direction=tx.direction,
-                merchant=tx.merchant,
-                description=tx.description,
-                category=cat,
+                merchant_description=tx.merchant_description,
+                mcc=tx.mcc,
+                city=tx.city,
+                country=tx.country,
+                predicted_main_category=cat.get("predicted_main_category"),
+                predicted_main_category_description=cat.get("predicted_main_category_description"),
+                predicted_subcategory=cat.get("predicted_subcategory"),
+                predicted_subcategory_description=cat.get("predicted_subcategory_description"),
+                predicted_sub_subcategory=cat.get("predicted_sub_subcategory"),
+                confidence=cat.get("confidence"),
+                classification_source=cat.get("classification_source"),
+                matched_by=cat.get("matched_by"),
             )
         )
         accepted += 1
@@ -64,11 +85,18 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
     db.commit()
 
     stored_total_for_user = (
-        db.query(Transaction).filter(Transaction.user_id == transactions[0].user_id).count()
-        if transactions else 0
+        db.query(Transaction)
+        .filter(Transaction.user_id == transactions[0].user_id)
+        .count()
+        if transactions and transactions[0].user_id
+        else 0
     )
 
-    return {"accepted": accepted, "rejected": rejected, "stored_total_for_user": stored_total_for_user}
+    return {
+        "accepted": accepted,
+        "rejected": rejected,
+        "stored_total_for_user": stored_total_for_user,
+    }
 
 
 @router.get("/transactions")
@@ -86,14 +114,90 @@ def list_transactions(user_id: str, db: Session = Depends(get_db)):
             {
                 "user_id": t.user_id,
                 "transaction_id": t.transaction_id,
-                "timestamp": t.timestamp.isoformat(),
+                "timestamp": t.timestamp.isoformat() if t.timestamp else None,
                 "amount": t.amount,
                 "currency": t.currency,
                 "direction": t.direction,
-                "merchant": t.merchant,
-                "description": t.description,
-                "category": t.category,
+                "merchant_description": t.merchant_description,
+                "mcc": t.mcc,
+                "city": t.city,
+                "country": t.country,
+                "predicted_main_category": t.predicted_main_category,
+                "predicted_main_category_description": t.predicted_main_category_description,
+                "predicted_subcategory": t.predicted_subcategory,
+                "predicted_subcategory_description": t.predicted_subcategory_description,
+                "predicted_sub_subcategory": t.predicted_sub_subcategory,
+                "confidence": t.confidence,
+                "classification_source": t.classification_source,
+                "matched_by": t.matched_by,
             }
             for t in txs
         ],
+    }
+
+
+@router.get("/transactions/{transaction_id}/category")
+def get_transaction_category(transaction_id: str, user_id: str, db: Session = Depends(get_db)):
+    tx = (
+        db.query(Transaction)
+        .filter(
+            Transaction.user_id == user_id,
+            Transaction.transaction_id == transaction_id,
+        )
+        .first()
+    )
+
+    if not tx:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+
+    return {
+        "user_id": tx.user_id,
+        "transaction_id": tx.transaction_id,
+        "merchant_description": tx.merchant_description,
+        "mcc": tx.mcc,
+        "city": tx.city,
+        "country": tx.country,
+        "predicted_main_category": tx.predicted_main_category,
+        "predicted_main_category_description": tx.predicted_main_category_description,
+        "predicted_subcategory": tx.predicted_subcategory,
+        "predicted_subcategory_description": tx.predicted_subcategory_description,
+        "predicted_sub_subcategory": tx.predicted_sub_subcategory,
+        "confidence": tx.confidence,
+        "classification_source": tx.classification_source,
+        "matched_by": tx.matched_by,
+    }
+
+@router.get("/transactions/{transaction_id}")
+def get_transaction(transaction_id: str, user_id: str, db: Session = Depends(get_db)):
+    tx = (
+        db.query(Transaction)
+        .filter(
+            Transaction.user_id == user_id,
+            Transaction.transaction_id == transaction_id,
+        )
+        .first()
+    )
+
+    if not tx:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+
+    return {
+        "user_id": tx.user_id,
+        "transaction_id": tx.transaction_id,
+        "timestamp": tx.timestamp.isoformat() if tx.timestamp else None,
+        "amount": tx.amount,
+        "currency": tx.currency,
+        "direction": tx.direction,
+        "merchant_description": tx.merchant_description,
+        "mcc": tx.mcc,
+        "city": tx.city,
+        "country": tx.country,
+        "predicted_main_category": tx.predicted_main_category,
+        "predicted_main_category_description": tx.predicted_main_category_description,
+        "predicted_subcategory": tx.predicted_subcategory,
+        "predicted_subcategory_description": tx.predicted_subcategory_description,
+        "predicted_sub_subcategory": tx.predicted_sub_subcategory,
+        "confidence": tx.confidence,
+        "classification_source": tx.classification_source,
+        "matched_by": tx.matched_by,
     }
