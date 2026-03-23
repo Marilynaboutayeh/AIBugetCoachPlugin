@@ -1,6 +1,8 @@
 import pandas as pd
 from pathlib import Path
+
 from app.services.categorizer import categorize
+from app.services.categorization.merchant_tokenizer import build_merchant_token
 
 
 INPUT_FILE = Path("./data/without_category_name.csv")
@@ -17,15 +19,20 @@ def main():
     results = []
 
     for _, row in df.iterrows():
+        merchant_description = row.get("merchant_description")
+
         result = categorize(
-            merchant_description=row.get("merchant_description"),
+            merchant_description=merchant_description,
             mcc=row.get("mcc"),
             city=row.get("city"),
             country=row.get("country"),
         )
 
+        merchant_token = build_merchant_token(merchant_description)
+
         results.append({
-            "merchant_description": row.get("merchant_description"),
+            "merchant_description": merchant_description,
+            "merchant_token": merchant_token,
             "mcc": row.get("mcc"),
             "city": row.get("city"),
             "country": row.get("country"),
