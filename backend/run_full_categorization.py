@@ -26,6 +26,8 @@ def main():
             mcc=row.get("mcc"),
             city=row.get("city"),
             country=row.get("country"),
+            amount=row.get("amount"),
+            date=row.get("date"),
         )
 
         merchant_token = build_merchant_token(merchant_description)
@@ -36,6 +38,8 @@ def main():
             "mcc": row.get("mcc"),
             "city": row.get("city"),
             "country": row.get("country"),
+            "amount": row.get("amount"),
+            "date": row.get("date"),
             # "original_category_name": row.get("category_name"),
 
             "predicted_main_category": result.get("predicted_main_category"),

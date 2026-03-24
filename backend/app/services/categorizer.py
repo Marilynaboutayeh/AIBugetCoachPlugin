@@ -28,7 +28,15 @@ from app.services.categorization.rule_engine import categorize_by_rules
 
 
 class CategorizerService:
-    def categorize_transaction(self, mcc, merchant_description=None, city=None, country=None):
+    def categorize_transaction(
+        self,
+        mcc,
+        merchant_description=None,
+        city=None,
+        country=None,
+        amount=None,
+        date=None,
+    ):
         rule_result = categorize_by_rules(
             mcc=mcc,
             merchant_description=merchant_description,
@@ -38,7 +46,14 @@ class CategorizerService:
 
         # later:
         # if rule_result.main_category is None:
-        #     return ml_fallback(...)
+        #     return ml_fallback(
+        #         mcc=mcc,
+        #         merchant_description=merchant_description,
+        #         city=city,
+        #         country=country,
+        #         amount=amount,
+        #         date=date,
+        #     )
 
         return {
             "predicted_main_category": rule_result.main_category,
@@ -52,11 +67,20 @@ class CategorizerService:
         }
 
 
-def categorize(merchant_description: str, mcc: str, city: str, country: str):
+def categorize(
+    merchant_description: str,
+    mcc: str,
+    city: str,
+    country: str,
+    amount=None,
+    date=None,
+):
     service = CategorizerService()
     return service.categorize_transaction(
         mcc=mcc,
         merchant_description=merchant_description,
         city=city,
         country=country,
+        amount=amount,
+        date=date,
     )
