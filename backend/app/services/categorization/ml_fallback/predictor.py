@@ -83,12 +83,12 @@ if __name__ == "__main__":
     predictor = MLFallbackPredictor()
 
     result = predictor.predict(
-        merchant_description="SQSP* DOMAIN#215854114",
-        merchant_token="",
-        predicted_subcategory="restaurants & digital goods",
+        merchant_description="zara",
+        merchant_token="zara",
+        predicted_subcategory="clothing store",
         city="beirut",
         country="lebanon",
-        amount=25.0,
+        amount=120.0,
         transaction_month="3",
         transaction_day_of_week="2",
     )

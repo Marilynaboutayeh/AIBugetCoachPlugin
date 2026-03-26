@@ -15,17 +15,17 @@ from app.services.categorization.ml_fallback.preprocessor import split_training_
 
 
 TEXT_FEATURE = "combined_text"
-
 CATEGORICAL_FEATURES = [
+    # "mcc",
     "predicted_subcategory",
+    # "predicted_sub_subcategory",
     "city",
     "country",
     "transaction_month",
     "transaction_day_of_week",
 ]
-
 NUMERIC_FEATURES = [
-    "amount",
+    # "amount",
 ]
 
 
@@ -57,7 +57,7 @@ def build_model_pipeline() -> Pipeline:
         transformers=[
             ("text", text_transformer, TEXT_FEATURE),
             ("cat", categorical_transformer, CATEGORICAL_FEATURES),
-            ("num", numeric_transformer, NUMERIC_FEATURES),
+            # ("num", numeric_transformer, NUMERIC_FEATURES),
         ]
     )
 
