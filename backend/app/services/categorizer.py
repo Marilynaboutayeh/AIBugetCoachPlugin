@@ -117,6 +117,7 @@ class CategorizerService:
             merchant_description=merchant_description or "",
             merchant_token=merchant_token or "",
             predicted_subcategory=rule_result.subcategory or "",
+            predicted_sub_subcategory=rule_result.sub_subcategory or "",
             city=city or "",
             country=country or "",
             amount=amount if amount is not None else 0.0,
@@ -174,7 +175,7 @@ if __name__ == "__main__":
     result = categorize(
         merchant_description="zara",
         merchant_token="zara",
-        mcc="",
+        mcc="5691",
         city="beirut",
         country="lebanon",
         amount=120.0,
