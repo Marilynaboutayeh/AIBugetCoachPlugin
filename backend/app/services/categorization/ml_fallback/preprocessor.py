@@ -105,7 +105,7 @@ def get_feature_columns() -> list[str]:
     return [
         "combined_text",
         "predicted_subcategory",
-        "predicted_sub_subcategory",
+        # "predicted_sub_subcategory",
         "city",
         "country",
         "amount",

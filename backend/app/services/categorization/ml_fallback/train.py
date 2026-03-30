@@ -18,7 +18,7 @@ TEXT_FEATURE = "combined_text"
 CATEGORICAL_FEATURES = [
     # "mcc",
     "predicted_subcategory",
-    "predicted_sub_subcategory",
+    # "predicted_sub_subcategory",
     "city",
     "country",
     "transaction_month",

@@ -25,7 +25,7 @@ TEXT_COLUMNS = [
 
 CATEGORICAL_COLUMNS = [
     "predicted_subcategory",
-    "predicted_sub_subcategory",
+    # "predicted_sub_subcategory",
     "city",
     "country",
 ]

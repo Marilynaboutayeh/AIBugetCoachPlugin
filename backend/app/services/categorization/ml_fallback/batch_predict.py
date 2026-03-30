@@ -23,7 +23,7 @@ def prepare_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         "merchant_description",
         "merchant_token",
         "predicted_subcategory",
-        "predicted_sub_subcategory",
+        # "predicted_sub_subcategory",
         "city",
         "country",
     ]:
@@ -87,7 +87,7 @@ def run_batch_prediction():
             merchant_description=row.get("merchant_description", ""),
             merchant_token=row.get("merchant_token", ""),
             predicted_subcategory=row.get("predicted_subcategory", ""),
-            predicted_sub_subcategory=row.get("predicted_sub_subcategory", ""),
+            # predicted_sub_subcategory=row.get("predicted_sub_subcategory", ""),
             city=row.get("city", ""),
             country=row.get("country", ""),
             amount=row.get("amount", 0.0),
