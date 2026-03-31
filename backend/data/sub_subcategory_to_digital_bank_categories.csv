@@ -1,0 +1,169 @@
+mcc,sub_subcategory,digital_banking_category
+742,Veterinary Services,Professional Services
+763,Agricultural Cooperatives,Professional Services
+780,Landscaping Services,Professional Services
+781,Landscape & Horticultural Services,Professional Services
+782,Lawn & Garden Services,Professional Services
+1520,General Contractors,Professional Services
+1711,Air Conditioning & Heating Contractors,Professional Services
+1731,Electrical Contractors,Bills and Utilities
+1740,Masonry / Stonework Contractors,Professional Services
+1750,Carpentry Contractors,Professional Services
+1761,Roofing Contractors,Professional Services
+1771,Concrete Contractors,Professional Services
+1799,Special Trade Contractors,Professional Services
+3000,United Airlines,Travel & Airlines
+3001,American Airlines,Travel & Airlines
+3003,Air France,Travel & Airlines
+3004,British Airways,Travel & Airlines
+3005,Lufthansa,Travel & Airlines
+3006,Japan Airlines,Travel & Airlines
+3007,Air Canada,Travel & Airlines
+3008,KLM,Travel & Airlines
+3009,Qantas,Travel & Airlines
+3010,Scandinavian Airlines,Travel & Airlines
+3011,Aer Lingus,Travel & Airlines
+3012,Alitalia,Travel & Airlines
+3026,Emirates Airline,Travel & Airlines
+3058,Delta Airlines,Travel & Airlines
+3066,Southwest Airlines,Travel & Airlines
+3351,Affiliated Auto Rental,Travel & Airlines
+3355,Sixt Rent-A-Car,Travel & Airlines
+3357,Hertz,Travel & Airlines
+3366,Budget Rent-A-Car,Travel & Airlines
+3389,Avis Rent-A-Car,Travel & Airlines
+3501,Holiday Inn,Hotels & Accommodation
+3502,Best Western,Hotels & Accommodation
+3503,Sheraton,Hotels & Accommodation
+3504,Hilton,Hotels & Accommodation
+3513,Westin Hotels,Hotels & Accommodation
+3528,Hyatt Hotels,Hotels & Accommodation
+3530,Marriott,Hotels & Accommodation
+3543,Four Seasons,Hotels & Accommodation
+4011,Railroads,Transport & Taxis
+4111,Local/Suburban Transportation,Transport & Taxis
+4112,Passenger Railways,Transport & Taxis
+4121,Taxi Services,Transport & Taxis
+4131,Bus Lines,Transport & Taxis
+4214,Motor Freight Carriers,Transport & Taxis
+4215,Courier Services,Transport & Taxis
+4411,Cruise Lines,Transport & Taxis
+4511,Airlines,Travel & Airlines
+4582,Airports,Transport & Taxis
+4812,Telecom Equipment,Bills and Utilities
+4814,Telecommunication Services,Bills and Utilities
+4816,Computer Network Services,Electronics & Home
+4829,Money Transfer,Financial Services
+4899,Cable / Satellite Services,Bills and Utilities
+4900,"Utilities (Electric, Gas, Water)",Bills and Utilities
+5013,Motor Vehicle Supplies,Shopping
+5021,Office Furniture,Shopping
+5039,Construction Materials,Shopping
+5045,Computers & Software,Electronics & Home
+5047,Medical Equipment,Health & Pharmacy
+5065,Electrical Parts,Bills and Utilities
+5072,Hardware Equipment,Shopping
+5085,Industrial Supplies,Shopping
+5094,Precious Stones & Metals,Shopping
+5099,Durable Goods Wholesale,Shopping
+5200,Home Supply Warehouse Stores,Shopping
+5211,Lumber & Building Materials,Shopping
+5231,Glass Stores,Shopping
+5251,Hardware Stores,Shopping
+5261,Garden Supply Stores,Shopping
+5300,Wholesale Clubs,Shopping
+5310,Discount Stores,Shopping
+5311,Department Stores,Shopping
+5331,Variety Stores,Shopping
+5399,Misc. General Merchandise,Shopping
+5411,Grocery Stores / Supermarkets,Groceries
+5422,Freezer & Locker Meat Provisioners,Groceries
+5441,Candy / Nut Stores,Groceries
+5451,Dairy Stores,Groceries
+5462,Bakeries,Groceries
+5499,Misc Food Stores,Groceries
+5541,Service Stations (Fuel),Fuel & Automotive
+5542,Automated Fuel Dispensers,Fuel & Automotive
+5611,Men’s Clothing Stores,Clothing & Apparel
+5621,Women’s Clothing Stores,Clothing & Apparel
+5631,Children’s Clothing,Clothing & Apparel
+5641,Baby Clothing,Clothing & Apparel
+5651,Family Clothing Stores,Clothing & Apparel
+5661,Shoe Stores,Clothing & Apparel
+5691,Men’s & Women’s Clothing,Clothing & Apparel
+5712,Furniture Stores,Electronics & Home
+5713,Floor Covering Stores,Electronics & Home
+5714,Drapery Stores,Electronics & Home
+5722,Household Appliance Stores,Electronics & Home
+5732,Electronics Stores,Electronics & Home
+5733,Music Stores,Entertainment & Leisure
+5734,Computer Software Stores,Electronics & Home
+5811,Caterers,Restaurants & Dining
+5812,Restaurants,Restaurants & Dining
+5813,Bars / Taverns,Bars & Alcohol
+5814,Fast Food Restaurants,Restaurants & Dining
+5912,Pharmacies,Health & Pharmacy
+5921,Liquor Stores,Bars & Alcohol
+5931,Pawn Shops,Shopping
+5941,Sporting Goods Stores,Shopping
+5942,Book Stores,Education
+5943,Office Supplies,Shopping
+5944,Jewelry Stores,Clothing & Apparel
+5945,Hobby Stores,Shopping
+5947,Gift Shops,Shopping
+5948,Luggage Stores,Clothing & Apparel
+5977,Cosmetic Stores,Beauty & Personal Care
+5999,Miscellaneous Retail Stores,Shopping
+6010,Manual Cash Advance,Financial Services
+6011,ATM Cash Withdrawal,Financial Services
+6012,Financial Institutions,Financial Services
+6050,Quasi Cash,Financial Services
+6051,Cryptocurrency / Foreign Currency,Financial Services
+6211,Securities Brokers,Financial Services
+6300,Insurance Sales,Financial Services
+6513,Real Estate Agents,Financial Services
+6536,Money Transfer,Financial Services
+6540,Stored Value Card Load,Financial Services
+7011,Hotels / Motels,Hotels & Accommodation
+7032,Campsites,Travel & Airlines
+7033,Trailer Parks,Travel & Airlines
+7210,Laundry Services,Beauty & Personal Care
+7216,Dry Cleaners,Beauty & Personal Care
+7221,Photographic Studios,Beauty & Personal Care
+7230,Beauty Salons,Beauty & Personal Care
+7251,Shoe Repair,Clothing & Apparel
+7261,Funeral Services,Beauty & Personal Care
+7299,Misc Personal Services,Beauty & Personal Care
+7311,Advertising Services,Professional Services
+7399,Business Services,Professional Services
+7800,Government Lottery,Government and Taxes
+7801,Internet Gambling,Entertainment & Leisure
+7832,Movie Theaters,Entertainment & Leisure
+7841,Video Rental Stores,Entertainment & Leisure
+7922,Theatrical Producers,Entertainment & Leisure
+7929,Bands / Orchestras,Entertainment & Leisure
+7932,Billiard / Pool Establishments,Entertainment & Leisure
+7941,Sports Clubs,Entertainment & Leisure
+7991,Tourist Attractions,Entertainment & Leisure
+7995,Betting / Gambling,Entertainment & Leisure
+7997,Membership Clubs,Entertainment & Leisure
+8011,Doctors,Health & Pharmacy
+8021,Dentists,Health & Pharmacy
+8041,Chiropractors,Health & Pharmacy
+8042,Optometrists,Health & Pharmacy
+8043,Opticians,Health & Pharmacy
+8049,Medical Services,Health & Pharmacy
+8050,Nursing Homes,Health & Pharmacy
+8062,Hospitals,Health & Pharmacy
+8071,Medical Laboratories,Health & Pharmacy
+8111,Legal Services,Professional Services
+8211,Elementary & Secondary Schools,Education
+8220,Colleges / Universities,Education
+8241,Correspondence Schools,Education
+8299,Educational Services,Education
+9211,Court Costs,Government and Taxes
+9222,Fines,Government and Taxes
+9223,Bail Payments,Government and Taxes
+9311,Tax Payments,Government and Taxes
+9399,Government Services,Government and Taxes
+9402,Postal Services,Government and Taxes
