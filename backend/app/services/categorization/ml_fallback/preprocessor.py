@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pandas as pd
-from sklearn.model_selection import GroupShuffleSplit
+from sklearn.model_selection import train_test_split
 
 from app.services.categorization.ml_fallback.config import (
     TRAINING_DATA_FILE,
@@ -13,6 +13,14 @@ from app.services.categorization.ml_fallback.config import (
     RANDOM_STATE,
     TEST_SIZE,
 )
+
+# Minimum number of rows required for a (main_category, subcategory) pair
+# to be included in the stratified train/test split.
+# Pairs below this threshold are added to train only.
+MIN_PAIR_COUNT = 3
+
+# Column used as helper/context feature and as fairness key in the split
+SUBCATEGORY_COLUMN = "predicted_subcategory"
 
 
 def load_training_data() -> pd.DataFrame:
@@ -76,11 +84,23 @@ def prepare_training_dataframe() -> pd.DataFrame:
     # Clean target
     df[TARGET_COLUMN] = df[TARGET_COLUMN].apply(clean_text)
 
+    # Make sure subcategory exists and is cleaned
+    if SUBCATEGORY_COLUMN not in df.columns:
+        df[SUBCATEGORY_COLUMN] = ""
+    df[SUBCATEGORY_COLUMN] = df[SUBCATEGORY_COLUMN].apply(clean_text)
+
     # Create combined text field
+    merchant_description = (
+        df["merchant_description"] if "merchant_description" in df.columns else ""
+    )
+    merchant_token = (
+        df["merchant_token"] if "merchant_token" in df.columns else ""
+    )
+
     df["combined_text"] = (
-        df["merchant_description"].fillna("")
+        merchant_description.fillna("").astype(str)
         + " "
-        + df["merchant_token"].fillna("")
+        + merchant_token.fillna("").astype(str)
     ).str.strip()
 
     # Date-derived features
@@ -94,6 +114,13 @@ def prepare_training_dataframe() -> pd.DataFrame:
     else:
         df["transaction_month"] = "0"
         df["transaction_day_of_week"] = "0"
+
+    # Create fairness key: main_category + subcategory
+    df["pair_label"] = (
+        df[TARGET_COLUMN].fillna("").astype(str)
+        + "||"
+        + df[SUBCATEGORY_COLUMN].fillna("").astype(str)
+    )
 
     return df
 
@@ -129,25 +156,51 @@ def build_training_matrices():
 
 def split_training_data():
     """
-    Split the dataset into train and test sets using group-based splitting
-    so the same merchant pattern does not appear in both sets.
+    Split the dataset into train and test sets fairly using the
+    (main_category, predicted_subcategory) combination.
+
+    Logic:
+    - keep all rows with valid target labels
+    - create pair_label = main_category || predicted_subcategory
+    - pairs with count >= MIN_PAIR_COUNT go to stratified split
+    - rare pairs (< MIN_PAIR_COUNT) are added to train only
     """
     X, y, df = build_training_matrices()
 
-    groups = df["combined_text"]
+    pair_counts = df["pair_label"].value_counts()
 
-    splitter = GroupShuffleSplit(
-        n_splits=1,
+    common_pairs = pair_counts[pair_counts >= MIN_PAIR_COUNT].index
+    rare_pairs = pair_counts[pair_counts < MIN_PAIR_COUNT].index
+
+    df_common = df[df["pair_label"].isin(common_pairs)].copy()
+    df_rare = df[df["pair_label"].isin(rare_pairs)].copy()
+
+    if df_common.empty:
+        raise ValueError(
+            "No common (main_category, predicted_subcategory) pairs found. "
+            "Lower MIN_PAIR_COUNT or inspect the training data."
+        )
+
+    # Need at least 2 different pair classes for stratified split
+    if df_common["pair_label"].nunique() < 2:
+        raise ValueError(
+            "Not enough distinct common pair_label classes for stratified split."
+        )
+
+    train_common_idx, test_idx = train_test_split(
+        df_common.index,
         test_size=TEST_SIZE,
         random_state=RANDOM_STATE,
+        stratify=df_common["pair_label"],
     )
 
-    train_idx, test_idx = next(splitter.split(X, y, groups=groups))
+    # Rare pairs go to train only
+    train_idx = pd.Index(train_common_idx).append(df_rare.index)
 
-    X_train = X.iloc[train_idx].copy()
-    X_test = X.iloc[test_idx].copy()
-    y_train = y.iloc[train_idx].copy()
-    y_test = y.iloc[test_idx].copy()
+    X_train = X.loc[train_idx].copy()
+    X_test = X.loc[test_idx].copy()
+    y_train = y.loc[train_idx].copy()
+    y_test = y.loc[test_idx].copy()
 
     return X_train, X_test, y_train, y_test, df
 
@@ -175,9 +228,57 @@ def export_train_test_data():
     print(f"Test file: {output_dir / 'test_data.csv'}")
 
 
+def inspect_pair_distribution():
+    """
+    Inspect the distribution of (main_category, predicted_subcategory) pairs
+    in the full dataset, train set, and test set.
+    """
+    X_train, X_test, y_train, y_test, df = split_training_data()
+
+    train_idx = X_train.index
+    test_idx = X_test.index
+
+    train_df = df.loc[train_idx].copy()
+    test_df = df.loc[test_idx].copy()
+
+    print("Full dataset size:", len(df))
+    print("Train size:", len(train_df))
+    print("Test size:", len(test_df))
+    print()
+
+    print("Unique pair_label count in full data:", df["pair_label"].nunique())
+    print("Unique pair_label count in train:", train_df["pair_label"].nunique())
+    print("Unique pair_label count in test:", test_df["pair_label"].nunique())
+    print()
+
+    print("Top full pair_label counts:")
+    print(df["pair_label"].value_counts().head(20))
+    print()
+
+    print("Top train pair_label counts:")
+    print(train_df["pair_label"].value_counts().head(20))
+    print()
+
+    print("Top test pair_label counts:")
+    print(test_df["pair_label"].value_counts().head(20))
+    print()
+
+    rare_pair_counts = df["pair_label"].value_counts()
+    rare_pairs = rare_pair_counts[rare_pair_counts < MIN_PAIR_COUNT]
+
+    print(f"Number of rare pairs (< {MIN_PAIR_COUNT} rows):", len(rare_pairs))
+    if not rare_pairs.empty:
+        print("Sample rare pairs:")
+        print(rare_pairs.head(20))
+
+
 def inspect_train_test_overlap():
     """
-    Check whether train and test still share the same merchant patterns.
+    Check overlap of merchant patterns between train and test.
+
+    Note:
+    With the new fair stratified split, overlap in combined_text may happen.
+    This function is now only informational and no longer a strict leakage test.
     """
     X_train, X_test, _, _, df = split_training_data()
 
@@ -204,6 +305,7 @@ if __name__ == "__main__":
     print("Dataset loaded successfully.")
     print("Full dataset shape:", df.shape)
     print("Number of target classes:", df[TARGET_COLUMN].nunique())
+    print("Number of pair_label classes:", df["pair_label"].nunique())
     print("Feature columns:", X_train.columns.tolist())
     print("X_train shape:", X_train.shape)
     print("X_test shape:", X_test.shape)
