@@ -9,7 +9,8 @@ BACKEND_DIR = APP_DIR.parent
 
 # Input dataset
 # TRAINING_DATA_FILE = BACKEND_DIR / "categorized_output.csv"
-TRAINING_DATA_FILE = BACKEND_DIR / "categorized_curated.csv"
+# TRAINING_DATA_FILE = BACKEND_DIR / "categorized_curated.csv"
+TRAINING_DATA_FILE = BACKEND_DIR / "categorized_curated_with_subsub_mapping.csv"
 
 # Output artifacts
 ARTIFACTS_DIR = ML_FALLBACK_DIR / "artifacts"
