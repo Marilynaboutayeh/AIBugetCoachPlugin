@@ -32,6 +32,43 @@ class IngestResponse(BaseModel):
     stored_total_for_user: int
 
 
+class TransactionIn(BaseModel):
+    merchant_description: str = Field(..., example="Carrefour Beirut")
+    mcc: str = Field(..., example="5411")
+    city: str = Field(..., example="Beirut")
+    country: str = Field(..., example="LB")
+
+    user_id: Optional[str] = Field(None, example="user_123")
+    transaction_id: Optional[str] = Field(None, example="tx_001")
+    timestamp: Optional[datetime] = None
+    amount: Optional[float] = None
+    currency: Optional[str] = Field(None, example="USD")
+    direction: Optional[Literal["debit", "credit"]] = None
+
+
+class IngestResponse(BaseModel):
+    accepted: int
+    rejected: int
+    stored_total_for_user: int
+
+
+class CategoryUpdateIn(BaseModel):
+    predicted_main_category: str = Field(..., example="Entertainment & Leisure")
+    predicted_main_category_description: Optional[str] = Field(
+        None, example="Entertainment spending"
+    )
+    predicted_subcategory: Optional[str] = Field(
+        None, example="Digital Services"
+    )
+    predicted_subcategory_description: Optional[str] = Field(
+        None, example="Online subscriptions"
+    )
+    predicted_sub_subcategory: Optional[str] = Field(
+        None, example="Streaming"
+    )
+
+
+
 @router.post("/transactions:ingest", response_model=IngestResponse)
 def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends(get_db)):
     accepted = 0
@@ -200,4 +237,48 @@ def get_transaction(transaction_id: str, user_id: str, db: Session = Depends(get
         "confidence": tx.confidence,
         "classification_source": tx.classification_source,
         "matched_by": tx.matched_by,
+    }
+
+@router.patch("/transactions/{transaction_id}/category")
+def update_transaction_category(
+    transaction_id: str,
+    payload: CategoryUpdateIn,
+    user_id: str,
+    db: Session = Depends(get_db),
+):
+    tx = (
+        db.query(Transaction)
+        .filter(
+            Transaction.user_id == user_id,
+            Transaction.transaction_id == transaction_id,
+        )
+        .first()
+    )
+
+    if not tx:
+        raise HTTPException(status_code=404, detail="Transaction not found")
+
+    tx.predicted_main_category = payload.predicted_main_category
+    tx.predicted_main_category_description = payload.predicted_main_category_description
+    tx.predicted_subcategory = payload.predicted_subcategory
+    tx.predicted_subcategory_description = payload.predicted_subcategory_description
+    tx.predicted_sub_subcategory = payload.predicted_sub_subcategory
+
+    tx.classification_source = "manual_override"
+    tx.confidence = 1.0
+
+    db.commit()
+    db.refresh(tx)
+
+    return {
+        "message": "Transaction category updated successfully",
+        "user_id": tx.user_id,
+        "transaction_id": tx.transaction_id,
+        "predicted_main_category": tx.predicted_main_category,
+        "predicted_main_category_description": tx.predicted_main_category_description,
+        "predicted_subcategory": tx.predicted_subcategory,
+        "predicted_subcategory_description": tx.predicted_subcategory_description,
+        "predicted_sub_subcategory": tx.predicted_sub_subcategory,
+        "confidence": tx.confidence,
+        "classification_source": tx.classification_source,
     }
