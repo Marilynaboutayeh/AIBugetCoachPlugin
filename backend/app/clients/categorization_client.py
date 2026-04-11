@@ -1,7 +1,12 @@
+import os
 import httpx
 
-CATEGORIZATION_SERVICE_URL = "http://127.0.0.1:8001/internal/categorize"
+# CATEGORIZATION_SERVICE_URL = "http://127.0.0.1:8001/internal/categorize"
 
+CATEGORIZATION_SERVICE_URL = os.getenv(
+    "CATEGORIZATION_SERVICE_URL",
+    "http://127.0.0.1:8001/internal/categorize",
+)
 
 def categorize_via_service(
     merchant_description: str,
