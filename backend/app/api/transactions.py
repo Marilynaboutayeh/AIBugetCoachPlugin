@@ -7,29 +7,9 @@ from sqlalchemy.orm import Session
 
 from app.core.db import get_db
 from app.models.transaction import Transaction
-from app.services.categorizer import categorize
+from app.clients.categorization_client import categorize_via_service
 
 router = APIRouter(prefix="/v1", tags=["transactions"])
-
-
-class TransactionIn(BaseModel):
-    merchant_description: str = Field(..., example="Carrefour Beirut")
-    mcc: str = Field(..., example="5411")
-    city: str = Field(..., example="Beirut")
-    country: str = Field(..., example="LB")
-
-    user_id: Optional[str] = Field(None, example="user_123")
-    transaction_id: Optional[str] = Field(None, example="tx_001")
-    timestamp: Optional[datetime] = None
-    amount: Optional[float] = None
-    currency: Optional[str] = Field(None, example="USD")
-    direction: Optional[Literal["debit", "credit"]] = None
-
-
-class IngestResponse(BaseModel):
-    accepted: int
-    rejected: int
-    stored_total_for_user: int
 
 
 class TransactionIn(BaseModel):
@@ -68,7 +48,6 @@ class CategoryUpdateIn(BaseModel):
     )
 
 
-
 @router.post("/transactions:ingest", response_model=IngestResponse)
 def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends(get_db)):
     accepted = 0
@@ -88,12 +67,15 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
                 rejected += 1
                 continue
 
-        cat = categorize(
+        cat = categorize_via_service(
             merchant_description=tx.merchant_description,
             mcc=tx.mcc,
             city=tx.city,
             country=tx.country,
+            amount=tx.amount,
+            date=tx.timestamp,
         )
+        # print("CATEGORIZATION RESPONSE:", cat)
 
         db.add(
             Transaction(
@@ -107,11 +89,11 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
                 mcc=tx.mcc,
                 city=tx.city,
                 country=tx.country,
-                predicted_main_category=cat.get("main_category"),
-                predicted_main_category_description=cat.get("main_category_description"),
-                predicted_subcategory=cat.get("subcategory"),
-                predicted_subcategory_description=cat.get("subcategory_description"),
-                predicted_sub_subcategory=cat.get("sub_subcategory"),
+                predicted_main_category=cat.get("predicted_main_category"),
+                predicted_main_category_description=cat.get("predicted_main_category_description"),
+                predicted_subcategory=cat.get("predicted_subcategory"),
+                predicted_subcategory_description=cat.get("predicted_subcategory_description"),
+                predicted_sub_subcategory=cat.get("predicted_sub_subcategory"),
                 confidence=cat.get("confidence"),
                 classification_source=cat.get("classification_source"),
                 matched_by=cat.get("matched_by"),
@@ -204,6 +186,7 @@ def get_transaction_category(transaction_id: str, user_id: str, db: Session = De
         "matched_by": tx.matched_by,
     }
 
+
 @router.get("/transactions/{transaction_id}")
 def get_transaction(transaction_id: str, user_id: str, db: Session = Depends(get_db)):
     tx = (
@@ -238,6 +221,7 @@ def get_transaction(transaction_id: str, user_id: str, db: Session = Depends(get
         "classification_source": tx.classification_source,
         "matched_by": tx.matched_by,
     }
+
 
 @router.patch("/transactions/{transaction_id}/category")
 def update_transaction_category(

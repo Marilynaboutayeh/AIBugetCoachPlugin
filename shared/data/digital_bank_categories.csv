@@ -1,0 +1,27 @@
+main_category,mcc_start,mcc_end,description
+Groceries,5411,5499,"Grocery stores, supermarkets"
+Restaurants & Dining,5811,5812,"Restaurants, cafes, fast food"
+Restaurants & Dining,5814,5814,"Restaurants, cafes, fast food"
+Bars & Alcohol,5813,5813,Bars
+Bars & Alcohol,5921,5921,Liquor stores
+Shopping,5311,5399,"Department stores, general retail"
+Clothing & Apparel,5611,5699,Clothing stores
+Electronics & Home,5712,5799,"Electronics, furniture, home stores"
+Transport & Taxis,4111,4121,"Taxi, public transport"
+Travel & Airlines,3000,3299,Airlines
+Travel & Airlines,4511,4511,Airlines
+Travel & Airlines,4722,4722,Travel agencies
+Hotels & Accommodation,3500,3799,Hotels and lodging
+Hotels & Accommodation,7011,7011,"Hotels, resorts"
+Fuel & Automotive,5511,5599,"Gas Stations, Auto dealers, automotive services"
+Health & Pharmacy,5912,5912,Pharmacies
+Health & Pharmacy,8011,8099,Medical and health services
+Beauty & Personal Care,7230,7230,Beauty salons
+Beauty & Personal Care,7297,7299,Personal care services and spas
+Entertainment & Leisure,7800,7999,"Cinemas, gaming, amusement, recreation"
+Education,8211,8299,"Schools, universities, education services"
+Professional Services,8111,8111,Legal services
+Professional Services,8931,8931,Accounting services
+Bills and Utilities,4800,4999,"Electricity, telecom, utilities"
+Financial Services,6000,6199,"ATM withdrawals, financial institutions"
+Government and Taxes,9000,9399,"Taxes, fines, government services"

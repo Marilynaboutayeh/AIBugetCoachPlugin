@@ -1,0 +1,169 @@
+mcc,sub_subcategory,subcategory
+0742,Veterinary Services,Agricultural Services
+0763,Agricultural Cooperatives,Agricultural Services
+0780,Landscaping Services,Agricultural Services
+0781,Landscape & Horticultural Services,Agricultural Services
+0782,Lawn & Garden Services,Agricultural Services
+1520,General Contractors,Contracted Services
+1711,Air Conditioning & Heating Contractors,Contracted Services
+1731,Electrical Contractors,Contracted Services
+1740,Masonry / Stonework Contractors,Contracted Services
+1750,Carpentry Contractors,Contracted Services
+1761,Roofing Contractors,Contracted Services
+1771,Concrete Contractors,Contracted Services
+1799,Special Trade Contractors,Contracted Services
+3000,United Airlines,Airlines
+3001,American Airlines,Airlines
+3003,Air France,Airlines
+3004,British Airways,Airlines
+3005,Lufthansa,Airlines
+3006,Japan Airlines,Airlines
+3007,Air Canada,Airlines
+3008,KLM,Airlines
+3009,Qantas,Airlines
+3010,Scandinavian Airlines,Airlines
+3011,Aer Lingus,Airlines
+3012,Alitalia,Airlines
+3026,Emirates Airline,Airlines
+3058,Delta Airlines,Airlines
+3066,Southwest Airlines,Airlines
+3351,Affiliated Auto Rental,Car Rental
+3355,Sixt Rent-A-Car,Car Rental
+3357,Hertz,Car Rental
+3366,Budget Rent-A-Car,Car Rental
+3389,Avis Rent-A-Car,Car Rental
+3501,Holiday Inn,Hotels
+3502,Best Western,Hotels
+3503,Sheraton,Hotels
+3504,Hilton,Hotels
+3513,Westin Hotels,Hotels
+3528,Hyatt Hotels,Hotels
+3530,Marriott,Hotels
+3543,Four Seasons,Hotels
+4011,Railroads,Transportation
+4111,Local/Suburban Transportation,Transportation
+4112,Passenger Railways,Transportation
+4121,Taxi Services,Transportation
+4131,Bus Lines,Transportation
+4214,Motor Freight Carriers,Transportation
+4215,Courier Services,Transportation
+4411,Cruise Lines,Transportation
+4511,Airlines,Transportation
+4582,Airports,Transportation
+4812,Telecom Equipment,Utilities & Telecom
+4814,Telecommunication Services,Utilities & Telecom
+4816,Computer Network Services,Utilities & Telecom
+4829,Money Transfer,Utilities & Telecom
+4899,Cable / Satellite Services,Utilities & Telecom
+4900,"Utilities (Electric, Gas, Water)",Utilities & Telecom
+5013,Motor Vehicle Supplies,Wholesale
+5021,Office Furniture,Wholesale
+5039,Construction Materials,Wholesale
+5045,Computers & Software,Wholesale
+5047,Medical Equipment,Wholesale
+5065,Electrical Parts,Wholesale
+5072,Hardware Equipment,Wholesale
+5085,Industrial Supplies,Wholesale
+5094,Precious Stones & Metals,Wholesale
+5099,Durable Goods Wholesale,Wholesale
+5200,Home Supply Warehouse Stores,Retail
+5211,Lumber & Building Materials,Retail
+5231,Glass Stores,Retail
+5251,Hardware Stores,Retail
+5261,Garden Supply Stores,Retail
+5300,Wholesale Clubs,Retail
+5310,Discount Stores,Retail
+5311,Department Stores,Retail
+5331,Variety Stores,Retail
+5399,Misc. General Merchandise,Retail
+5411,Grocery Stores / Supermarkets,Food Retail
+5422,Freezer & Locker Meat Provisioners,Food Retail
+5441,Candy / Nut Stores,Food Retail
+5451,Dairy Stores,Food Retail
+5462,Bakeries,Food Retail
+5499,Misc Food Stores,Food Retail
+5541,Service Stations (Fuel),Fuel
+5542,Automated Fuel Dispensers,Fuel
+5611,Men’s Clothing Stores,Apparel
+5621,Women’s Clothing Stores,Apparel
+5631,Children’s Clothing,Apparel
+5641,Baby Clothing,Apparel
+5651,Family Clothing Stores,Apparel
+5661,Shoe Stores,Apparel
+5691,Men’s & Women’s Clothing,Apparel
+5712,Furniture Stores,Home & Electronics
+5713,Floor Covering Stores,Home & Electronics
+5714,Drapery Stores,Home & Electronics
+5722,Household Appliance Stores,Home & Electronics
+5732,Electronics Stores,Home & Electronics
+5733,Music Stores,Home & Electronics
+5734,Computer Software Stores,Home & Electronics
+5811,Caterers,Restaurants
+5812,Restaurants,Restaurants
+5813,Bars / Taverns,Restaurants
+5814,Fast Food Restaurants,Restaurants
+5912,Pharmacies,Retail Specialty
+5921,Liquor Stores,Retail Specialty
+5931,Pawn Shops,Retail Specialty
+5941,Sporting Goods Stores,Retail Specialty
+5942,Book Stores,Retail Specialty
+5943,Office Supplies,Retail Specialty
+5944,Jewelry Stores,Retail Specialty
+5945,Hobby Stores,Retail Specialty
+5947,Gift Shops,Retail Specialty
+5948,Luggage Stores,Retail Specialty
+5977,Cosmetic Stores,Retail Specialty
+5999,Miscellaneous Retail Stores,Retail Specialty
+6010,Manual Cash Advance,Financial
+6011,ATM Cash Withdrawal,Financial
+6012,Financial Institutions,Financial
+6050,Quasi Cash,Financial
+6051,Cryptocurrency / Foreign Currency,Financial
+6211,Securities Brokers,Financial
+6300,Insurance Sales,Financial
+6513,Real Estate Agents,Financial
+6536,Money Transfer,Financial
+6540,Stored Value Card Load,Financial
+7011,Hotels / Motels,Travel
+7032,Campsites,Travel
+7033,Trailer Parks,Travel
+7210,Laundry Services,Personal Services
+7216,Dry Cleaners,Personal Services
+7221,Photographic Studios,Personal Services
+7230,Beauty Salons,Personal Services
+7251,Shoe Repair,Personal Services
+7261,Funeral Services,Personal Services
+7299,Misc Personal Services,Personal Services
+7311,Advertising Services,Business Services
+7399,Business Services,Business Services
+7800,Government Lottery,Entertainment
+7801,Internet Gambling,Entertainment
+7832,Movie Theaters,Entertainment
+7841,Video Rental Stores,Entertainment
+7922,Theatrical Producers,Entertainment
+7929,Bands / Orchestras,Entertainment
+7932,Billiard / Pool Establishments,Entertainment
+7941,Sports Clubs,Entertainment
+7991,Tourist Attractions,Entertainment
+7995,Betting / Gambling,Entertainment
+7997,Membership Clubs,Entertainment
+8011,Doctors,Healthcare
+8021,Dentists,Healthcare
+8041,Chiropractors,Healthcare
+8042,Optometrists,Healthcare
+8043,Opticians,Healthcare
+8049,Medical Services,Healthcare
+8050,Nursing Homes,Healthcare
+8062,Hospitals,Healthcare
+8071,Medical Laboratories,Healthcare
+8111,Legal Services,Professional Services
+8211,Elementary & Secondary Schools,Education
+8220,Colleges / Universities,Education
+8241,Correspondence Schools,Education
+8299,Educational Services,Education
+9211,Court Costs,Government
+9222,Fines,Government
+9223,Bail Payments,Government
+9311,Tax Payments,Government
+9399,Government Services,Government
+9402,Postal Services,Government
