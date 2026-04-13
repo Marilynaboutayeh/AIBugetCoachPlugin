@@ -149,7 +149,7 @@ class CategorizerService:
             "matched_by": "low_confidence_ml_fallback",
         }
 
-
+        
 def categorize(
     merchant_description: str,
     mcc: str,
