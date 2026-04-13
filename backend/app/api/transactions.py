@@ -90,9 +90,12 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
 
         cat = categorize(
             merchant_description=tx.merchant_description,
+            merchant_token=tx.merchant_description,
             mcc=tx.mcc,
             city=tx.city,
             country=tx.country,
+            amount=tx.amount,
+            date=tx.timestamp,
         )
 
         db.add(
