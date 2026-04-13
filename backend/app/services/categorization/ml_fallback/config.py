@@ -8,7 +8,9 @@ APP_DIR = SERVICES_DIR.parent
 BACKEND_DIR = APP_DIR.parent
 
 # Input dataset
-TRAINING_DATA_FILE = BACKEND_DIR / "categorized_output.csv"
+# TRAINING_DATA_FILE = BACKEND_DIR / "categorized_output.csv"
+# TRAINING_DATA_FILE = BACKEND_DIR / "categorized_curated.csv"
+TRAINING_DATA_FILE = BACKEND_DIR / "categorized_curated_with_subsub_mapping.csv"
 
 # Output artifacts
 ARTIFACTS_DIR = ML_FALLBACK_DIR / "artifacts"
@@ -25,7 +27,7 @@ TEXT_COLUMNS = [
 
 CATEGORICAL_COLUMNS = [
     "predicted_subcategory",
-    "predicted_sub_subcategory",
+    # "predicted_sub_subcategory",
     "city",
     "country",
 ]

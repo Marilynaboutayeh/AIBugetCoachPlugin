@@ -37,3 +37,19 @@ def load_sub_subcategory_rules():
     df["mcc"] = df["mcc"].apply(normalize_mcc)
 
     return df.to_dict(orient="records")
+
+def normalize_label(value) -> str:
+    if value is None:
+        return ""
+
+    return " ".join(str(value).strip().lower().split())
+
+
+def load_sub_subcategory_to_digital_bank_rules():
+    path = DATA_DIR / "sub_subcategory_to_digital_bank_categories.csv"
+    df = pd.read_csv(path, dtype={"mcc": str})
+
+    if "sub_subcategory" in df.columns:
+        df["sub_subcategory"] = df["sub_subcategory"].apply(normalize_label)
+
+    return df.to_dict(orient="records")
