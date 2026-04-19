@@ -1,10 +1,15 @@
-from datetime import datetime
-from typing import Any, Dict, List, Tuple
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Tuple, Optional
 
 from app.models.transaction import Transaction
 
 
-def generate_insights_from_transactions(txs: List[Transaction]) -> Dict[str, Any]:
+def generate_insights_from_transactions(
+    txs: List[Transaction],
+    period: Optional[str] = None,
+    start_date: Optional[datetime] = None,
+    end_date: Optional[datetime] = None,
+) -> Dict[str, Any]:
     total_spent = 0.0
     total_income = 0.0
 
@@ -16,18 +21,80 @@ def generate_insights_from_transactions(txs: List[Transaction]) -> Dict[str, Any
     previous_period_spending = 0.0
 
     now = datetime.now()
-    current_year = now.year
-    current_month = now.month
-    current_day = now.day
 
-    if current_month == 1:
-        previous_month = 12
-        previous_month_year = current_year - 1
+    # ---------- period setup ----------
+    if period == "weekly":
+        period_label = "this week"
+        previous_period_label = "the same period last week"
+
+        start_current = (now - timedelta(days=now.weekday())).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        end_current = now
+
+        range_duration = end_current - start_current
+        start_previous = start_current - timedelta(days=7)
+        end_previous = start_previous + range_duration
+
+    elif period == "monthly":
+        period_label = "this month"
+        previous_period_label = "the same period last month"
+
+        start_current = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        end_current = now
+
+        if now.month == 1:
+            previous_month = 12
+            previous_year = now.year - 1
+        else:
+            previous_month = now.month - 1
+            previous_year = now.year
+
+        start_previous = start_current.replace(year=previous_year, month=previous_month)
+
+        try:
+            end_previous = now.replace(year=previous_year, month=previous_month)
+        except ValueError:
+            temp = now.replace(year=previous_year, month=previous_month, day=1)
+            next_month = (temp.replace(day=28) + timedelta(days=4)).replace(day=1)
+            end_previous = next_month - timedelta(days=1)
+
+    elif period == "custom" and start_date and end_date:
+        period_label = "the selected period"
+        previous_period_label = "the previous comparable period"
+
+        start_current = start_date
+        end_current = end_date
+
+        range_duration = end_current - start_current
+        end_previous = start_current - timedelta(seconds=1)
+        start_previous = end_previous - range_duration
+
     else:
-        previous_month = current_month - 1
-        previous_month_year = current_year
+        period_label = "all time"
+        previous_period_label = "the previous comparable period"
+        start_current = None
+        end_current = None
+        start_previous = None
+        end_previous = None
 
-    for tx in txs:
+    # ---------- filtering ----------
+    if period in ("weekly", "monthly", "custom") and start_current and end_current:
+        filtered_txs = [
+            tx for tx in txs
+            if tx.timestamp and start_current <= tx.timestamp <= end_current
+        ]
+
+        previous_filtered_txs = [
+            tx for tx in txs
+            if tx.timestamp and start_previous <= tx.timestamp <= end_previous
+        ]
+    else:
+        filtered_txs = txs
+        previous_filtered_txs = []
+
+    # ---------- current period summary ----------
+    for tx in filtered_txs:
         amount = float(tx.amount or 0.0)
         direction = tx.direction or "debit"
 
@@ -39,34 +106,24 @@ def generate_insights_from_transactions(txs: List[Transaction]) -> Dict[str, Any
 
             merchant = tx.merchant_description or "Unknown"
             spending_by_merchant[merchant] = spending_by_merchant.get(merchant, 0.0) + amount
-
-            if tx.timestamp:
-                tx_year = tx.timestamp.year
-                tx_month = tx.timestamp.month
-                tx_day = tx.timestamp.day
-
-                # Current month -> same period up to today
-                if (
-                    tx_year == current_year
-                    and tx_month == current_month
-                    and tx_day <= current_day
-                ):
-                    current_period_spending += amount
-                    current_period_merchant_counts[merchant] = (
-                        current_period_merchant_counts.get(merchant, 0) + 1
-                    )
-
-                # Previous month -> same period up to same day
-                elif (
-                    tx_year == previous_month_year
-                    and tx_month == previous_month
-                    and tx_day <= current_day
-                ):
-                    previous_period_spending += amount
+            current_period_merchant_counts[merchant] = (
+                current_period_merchant_counts.get(merchant, 0) + 1
+            )
 
         elif direction == "credit":
             total_income += amount
 
+    # ---------- previous period spending ----------
+    for tx in previous_filtered_txs:
+        amount = float(tx.amount or 0.0)
+        direction = tx.direction or "debit"
+
+        if direction == "debit":
+            previous_period_spending += amount
+
+    current_period_spending = total_spent
+
+    # ---------- top category ----------
     top_category = None
     top_category_amount = 0.0
     if spending_by_category:
@@ -75,6 +132,7 @@ def generate_insights_from_transactions(txs: List[Transaction]) -> Dict[str, Any
             key=lambda x: x[1]
         )
 
+    # ---------- top merchants ----------
     top_merchants: List[Tuple[str, float]] = sorted(
         spending_by_merchant.items(),
         key=lambda x: x[1],
@@ -91,7 +149,7 @@ def generate_insights_from_transactions(txs: List[Transaction]) -> Dict[str, Any
         ) * 100
 
         insights_text.append(
-            f"Your spending this month has increased by {abs(change_percent):.0f}% compared to the same period last month."
+            f"Your spending during {period_label} has increased by {abs(change_percent):.0f}% compared to {previous_period_label}."
         )
 
     # 2) Repeated merchant alert
@@ -104,7 +162,7 @@ def generate_insights_from_transactions(txs: List[Transaction]) -> Dict[str, Any
     if repeated_merchants:
         repeated_merchant = repeated_merchants[0]
         insights_text.append(
-            f"You made multiple purchases at {repeated_merchant} this month."
+            f"You made multiple purchases at {repeated_merchant} during {period_label}."
         )
 
     # 3) Spending concentration alert
@@ -114,11 +172,14 @@ def generate_insights_from_transactions(txs: List[Transaction]) -> Dict[str, Any
 
         if concentration_ratio >= 0.4:
             insights_text.append(
-                f"A significant portion of your spending is concentrated at {top_merchant_name}."
+                f"A significant portion of your spending during {period_label} is concentrated at {top_merchant_name}."
             )
 
     return {
-        "transaction_count": len(txs),
+        "period": period,
+        "start_date": start_current.isoformat() if start_current else None,
+        "end_date": end_current.isoformat() if end_current else None,
+        "transaction_count": len(filtered_txs),
         "total_spent": round(total_spent, 2),
         "total_income": round(total_income, 2),
         "spend_by_category": {
