@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Tuple, Optional
 
 from app.models.transaction import Transaction
-
+from app.services.insights.anomaly.detector import detect_anomalies
 
 def generate_insights_from_transactions(
     txs: List[Transaction],
@@ -92,11 +92,18 @@ def generate_insights_from_transactions(
     else:
         filtered_txs = txs
         previous_filtered_txs = []
+    
+    # ---------- anomaly detection ----------
+    anomaly_results = detect_anomalies(
+        txs=txs,
+        start_date=start_current,
+        end_date=end_current,
+    )
 
     # ---------- current period summary ----------
     for tx in filtered_txs:
         amount = float(tx.amount or 0.0)
-        direction = tx.direction or "debit"
+        direction = (tx.direction or "debit").lower()
 
         if direction == "debit":
             total_spent += amount
@@ -116,7 +123,7 @@ def generate_insights_from_transactions(
     # ---------- previous period spending ----------
     for tx in previous_filtered_txs:
         amount = float(tx.amount or 0.0)
-        direction = tx.direction or "debit"
+        direction = (tx.direction or "debit").lower()
 
         if direction == "debit":
             previous_period_spending += amount
@@ -141,18 +148,38 @@ def generate_insights_from_transactions(
 
     insights_text: List[str] = []
 
-    # 1) Spending increase alert
-    if previous_period_spending > 0 and current_period_spending > previous_period_spending:
-        change_percent = (
-            (current_period_spending - previous_period_spending)
-            / previous_period_spending
-        ) * 100
+    # ---------- 1) spending trend insight ----------
+    if period in ("weekly", "monthly", "custom"):
+        if previous_period_spending > 0:
+            change_percent = (
+                (current_period_spending - previous_period_spending)
+                / previous_period_spending
+            ) * 100
 
-        insights_text.append(
-            f"Your spending during {period_label} has increased by {abs(change_percent):.0f}% compared to {previous_period_label}."
-        )
+            if current_period_spending > previous_period_spending:
+                insights_text.append(
+                    f"Your spending during {period_label} has increased by {abs(change_percent):.0f}% compared to {previous_period_label}."
+                )
+            elif current_period_spending < previous_period_spending:
+                insights_text.append(
+                    f"Your spending during {period_label} has decreased by {abs(change_percent):.0f}% compared to {previous_period_label}."
+                )
+            else:
+                insights_text.append(
+                    f"Your spending during {period_label} is the same as {previous_period_label}."
+                )
 
-    # 2) Repeated merchant alert
+        elif previous_period_spending == 0 and current_period_spending > 0:
+            insights_text.append(
+                f"You spent money during {period_label}, while no spending was recorded in {previous_period_label}."
+            )
+
+        elif previous_period_spending == 0 and current_period_spending == 0:
+            insights_text.append(
+                f"No spending was recorded during {period_label}."
+            )
+
+    # ---------- 2) repeated merchant insight ----------
     repeated_merchants = [
         merchant
         for merchant, count in current_period_merchant_counts.items()
@@ -165,7 +192,7 @@ def generate_insights_from_transactions(
             f"You made multiple purchases at {repeated_merchant} during {period_label}."
         )
 
-    # 3) Spending concentration alert
+    # ---------- 3) spending concentration insight ----------
     if top_merchants and total_spent > 0:
         top_merchant_name, top_merchant_amount = top_merchants[0]
         concentration_ratio = top_merchant_amount / total_spent
@@ -174,6 +201,32 @@ def generate_insights_from_transactions(
             insights_text.append(
                 f"A significant portion of your spending during {period_label} is concentrated at {top_merchant_name}."
             )
+
+    # ---------- 4) top category insight ----------
+    if top_category and top_category_amount > 0:
+        insights_text.append(
+            f"Your highest spending category during {period_label} is {top_category} with a total of {round(top_category_amount, 2)}."
+        )
+
+    # ---------- 5) optional income insight ----------
+    if total_income > 0:
+        if total_spent > total_income:
+            insights_text.append(
+                f"Your spending during {period_label} is higher than your income for the same period."
+            )
+        elif total_spent < total_income:
+            insights_text.append(
+                f"Your income during {period_label} is higher than your spending."
+            )
+        else:
+            insights_text.append(
+                f"Your income and spending during {period_label} are equal."
+            )
+    # ---------- 6) anomaly insight ----------
+    if anomaly_results["anomaly_count"] > 0:
+        insights_text.append(
+            f"{anomaly_results['anomaly_count']} unusual spending transaction(s) were detected during {period_label}."
+        )
 
     return {
         "period": period,
@@ -194,5 +247,7 @@ def generate_insights_from_transactions(
             {"merchant": merchant, "amount": round(amount, 2)}
             for merchant, amount in top_merchants
         ],
+        "anomaly_count": anomaly_results["anomaly_count"],
+        "anomalies": anomaly_results["anomalies"],
         "insights_text": insights_text,
     }

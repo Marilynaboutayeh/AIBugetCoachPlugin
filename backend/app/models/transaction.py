@@ -19,6 +19,7 @@ class Transaction(Base):
     direction: Mapped[str | None] = mapped_column(String(10), nullable=True)
 
     merchant_description: Mapped[str] = mapped_column(String, nullable=False)
+    merchant_token: Mapped[str | None] = mapped_column(String, nullable=True)
     mcc: Mapped[str] = mapped_column(String(10), nullable=False)
     city: Mapped[str] = mapped_column(String(100), nullable=False)
     country: Mapped[str] = mapped_column(String(100), nullable=False)

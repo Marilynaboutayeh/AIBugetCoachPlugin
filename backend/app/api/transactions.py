@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.core.db import get_db
 from app.models.transaction import Transaction
 from app.clients.categorization_client import categorize_via_service
+from app.services.insights.merchant_tokenizer import build_merchant_token
 
 router = APIRouter(prefix="/v1", tags=["transactions"])
 
@@ -66,17 +67,19 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
             if exists:
                 rejected += 1
                 continue
+        
+        merchant_token = build_merchant_token(tx.merchant_description)
 
         cat = categorize_via_service(
             merchant_description=tx.merchant_description,
-            merchant_token=tx.merchant_description,
+            # merchant_token=tx.merchant_description,
             mcc=tx.mcc,
             city=tx.city,
             country=tx.country,
             amount=tx.amount,
             date=tx.timestamp,
         )
-        # print("CATEGORIZATION RESPONSE:", cat)
+        print("CATEGORIZATION RESPONSE:", cat)
 
         db.add(
             Transaction(
@@ -87,6 +90,7 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
                 currency=tx.currency,
                 direction=tx.direction,
                 merchant_description=tx.merchant_description,
+                merchant_token=merchant_token,
                 mcc=tx.mcc,
                 city=tx.city,
                 country=tx.country,
@@ -139,6 +143,7 @@ def list_transactions(user_id: str, db: Session = Depends(get_db)):
                 "currency": t.currency,
                 "direction": t.direction,
                 "merchant_description": t.merchant_description,
+                "merchant_token": t.merchant_token,
                 "mcc": t.mcc,
                 "city": t.city,
                 "country": t.country,
