@@ -31,6 +31,22 @@ def _safe_transaction_id(tx: Transaction) -> Optional[str]:
     """Return transaction id if present."""
     return getattr(tx, "transaction_id", None)
 
+def _safe_merchant_token(tx: Transaction) -> str:
+    """
+    Return normalized merchant token for anomaly grouping.
+    Falls back to merchant_description if merchant_token is missing.
+    """
+    token = getattr(tx, "merchant_token", None)
+
+    if token and str(token).strip():
+        return str(token).strip().lower()
+
+    merchant = getattr(tx, "merchant_description", None)
+
+    if merchant and str(merchant).strip():
+        return str(merchant).strip().lower()
+
+    return "unknown"
 
 def get_valid_debit_transactions(txs: List[Transaction]) -> List[Transaction]:
     """
@@ -233,6 +249,75 @@ def detect_category_amount_anomalies(
 
     return anomalies
 
+def detect_duplicate_charge_anomalies(
+    current_txs: List[Transaction],
+    time_window_minutes: int = 30,
+) -> List[Dict[str, Any]]:
+    """
+    Detect possible duplicate charges.
+
+    A duplicate charge is defined as:
+    - same normalized merchant token
+    - same amount
+    - transactions occurring within a short time window
+    """
+    anomalies: List[Dict[str, Any]] = []
+
+    sorted_txs = sorted(
+        [tx for tx in current_txs if tx.timestamp],
+        key=lambda tx: tx.timestamp
+    )
+
+    seen_pairs = set()
+
+    for i in range(len(sorted_txs)):
+        tx1 = sorted_txs[i]
+        amount1 = round(_safe_amount(tx1), 2)
+        merchant1 = _safe_merchant_token(tx1)
+
+        for j in range(i + 1, len(sorted_txs)):
+            tx2 = sorted_txs[j]
+            amount2 = round(_safe_amount(tx2), 2)
+            merchant2 = _safe_merchant_token(tx2)
+
+            time_diff_minutes = abs(
+                (tx2.timestamp - tx1.timestamp).total_seconds()
+            ) / 60
+
+            if time_diff_minutes > time_window_minutes:
+                break
+
+            if merchant1 == merchant2 and amount1 == amount2:
+                pair_key = tuple(sorted([
+                    str(_safe_transaction_id(tx1)),
+                    str(_safe_transaction_id(tx2)),
+                ]))
+
+                if pair_key in seen_pairs:
+                    continue
+
+                seen_pairs.add(pair_key)
+
+                anomalies.append(
+                    {
+                        "anomaly_type": "duplicate_charge",
+                        "severity": "high",
+                        "transaction_id": _safe_transaction_id(tx2),
+                        "matched_transaction_id": _safe_transaction_id(tx1),
+                        "merchant": merchant2,
+                        "category": _safe_category(tx2),
+                        "amount": amount2,
+                        "timestamp": tx2.timestamp.isoformat() if tx2.timestamp else None,
+                        "message": (
+                            "A possible duplicate charge was detected for this "
+                            "merchant and amount within a short time window."
+                        ),
+                        "time_window_minutes": time_window_minutes,
+                    }
+                )
+
+    return anomalies
+
 
 def detect_anomalies(
     txs: List[Transaction],
@@ -266,7 +351,16 @@ def detect_anomalies(
         historical_txs=historical_txs,
     )
 
-    anomalies = global_anomalies + category_anomalies
+    duplicate_charge_anomalies = detect_duplicate_charge_anomalies(
+        current_txs=current_txs,
+        time_window_minutes=10,     
+    )
+
+    anomalies = (
+        global_anomalies
+        + category_anomalies
+        + duplicate_charge_anomalies
+    )
 
     return {
         "anomaly_count": len(anomalies),
