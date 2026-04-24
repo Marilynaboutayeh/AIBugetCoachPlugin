@@ -80,7 +80,18 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
 
         merchant_token = build_merchant_token(tx.merchant_description)
 
-        cat = categorize_via_service(
+        # cat = categorize_via_service(
+        #     merchant_description=tx.merchant_description,
+        #     # merchant_token=tx.merchant_description,
+        #     mcc=tx.mcc,
+        #     city=tx.city,
+        #     country=tx.country,
+        #     amount=tx.amount,
+        #     date=tx.timestamp,
+        # )
+        # print("CATEGORIZATION RESPONSE:", cat) we removed it for privacy
+        try:
+            cat = categorize_via_service(
             merchant_description=tx.merchant_description,
             # merchant_token=tx.merchant_description,
             mcc=tx.mcc,
@@ -89,7 +100,20 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
             amount=tx.amount,
             date=tx.timestamp,
         )
-        # print("CATEGORIZATION RESPONSE:", cat) we removed it for privacy
+
+        except Exception:
+            log_api_event(
+                event_type="categorization_failed",
+                endpoint="/v1/transactions:ingest",
+                user_id=tx.user_id,
+                status="failed",
+                extra={
+                    "reason": "categorization_service_error",
+                },
+            )
+
+            rejected += 1
+            continue
 
         db.add(
             Transaction(
@@ -116,7 +140,26 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
         )
         accepted += 1
 
-    db.commit()
+    # db.commit()
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+
+        log_api_event(
+            event_type="transaction_commit_failed",
+            endpoint="/v1/transactions:ingest",
+            user_id=user_id_for_log,
+            status="failed",
+            extra={
+                "reason": "database_commit_error",
+            },
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Transactions could not be saved due to a database error."
+        )
 
     stored_total_for_user = (
         db.query(Transaction)
@@ -370,7 +413,29 @@ def update_transaction_category(
     tx.classification_source = "manual_override"
     tx.confidence = 1.0
 
-    db.commit()
+    # db.commit()
+    # db.refresh(tx)
+
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+
+        log_api_event(
+            event_type="transaction_category_commit_failed",
+            endpoint="/v1/transactions/{transaction_id}/category",
+            user_id=user_id,
+            status="failed",
+            extra={
+                "reason": "database_commit_error",
+            },
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Transaction category could not be updated due to a database error."
+        )
+
     db.refresh(tx)
 
     processing_time_ms = round((time.time() - start_time) * 1000, 2)
