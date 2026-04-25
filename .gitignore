@@ -14,3 +14,6 @@ venv/
 
 # Logs
 *.log
+
+#firebase 
+backend/firebase-service-account.json

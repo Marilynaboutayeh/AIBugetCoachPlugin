@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Firebase Login Test</title>
+</head>
+<body>
+  <h2>Firebase Google Login Test</h2>
+
+  <button id="loginBtn">Login with Google</button>
+
+  <h3>Firebase ID Token:</h3>
+  <textarea id="tokenBox" rows="12" cols="120"></textarea>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCQtcVK9WOcyemJzeBC4LQ6f3HYIMBqHyE",
+      authDomain: "ai-budget-coach-e2e67.firebaseapp.com",
+      projectId: "ai-budget-coach-e2e67",
+      storageBucket: "ai-budget-coach-e2e67.firebasestorage.app",
+      messagingSenderId: "299253036495",
+      appId: "1:299253036495:web:eb6b62466de08ce4654eba"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    document.getElementById("loginBtn").onclick = async () => {
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const token = await result.user.getIdToken();
+
+        document.getElementById("tokenBox").value = token;
+        console.log("Logged in as:", result.user.email);
+        console.log("Firebase ID token:", token);
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
+      }
+    };
+  </script>
+</body>
+</html>
