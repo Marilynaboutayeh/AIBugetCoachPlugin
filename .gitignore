@@ -17,3 +17,4 @@ venv/
 
 #firebase 
 backend/firebase-service-account.json
+firebase-login-test.html
