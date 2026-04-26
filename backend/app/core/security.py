@@ -2,18 +2,10 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from firebase_admin import auth
 
+from app.core.access_control import load_access_control_rules
+
 
 bearer_scheme = HTTPBearer(auto_error=False)
-
-
-# FYP demo authorization mapping
-ADMIN_EMAILS = {
-    "marilynaboutayeh@gmail.com"
-}
-
-USER_EMAIL_TO_ANON_ID = {
-    "bobibrahim771@gmail.com": "user_1"
-}
 
 
 def get_current_firebase_user(
@@ -53,12 +45,13 @@ def get_current_firebase_user(
 
 def get_user_role(current_user: dict) -> str:
     """
-    Determines whether the authenticated Firebase user is admin or normal user.
+    Returns admin or user based on the private access_control.csv file.
     """
 
-    email = current_user.get("email")
+    admin_emails, _ = load_access_control_rules()
+    email = current_user.get("email", "").strip().lower()
 
-    if email in ADMIN_EMAILS:
+    if email in admin_emails:
         return "admin"
 
     return "user"
@@ -83,18 +76,17 @@ def require_admin(current_user: dict):
 def check_user_access(current_user: dict, requested_user_id: str):
     """
     Authorization rule:
-
     - Admin can access all anonymized users.
     - Normal user can access only their mapped anonymized user_id.
     """
 
-    role = get_user_role(current_user)
+    admin_emails, user_email_to_anon_id = load_access_control_rules()
+    email = current_user.get("email", "").strip().lower()
 
-    if role == "admin":
+    if email in admin_emails:
         return True
 
-    email = current_user.get("email")
-    allowed_user_id = USER_EMAIL_TO_ANON_ID.get(email)
+    allowed_user_id = user_email_to_anon_id.get(email)
 
     if allowed_user_id != requested_user_id:
         raise HTTPException(
