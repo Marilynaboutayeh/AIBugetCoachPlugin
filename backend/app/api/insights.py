@@ -2,13 +2,16 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional
 import time
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
 from app.core.logger import log_api_event
 from app.models.transaction import Transaction
 from app.services.insights.insight_engine import generate_insights_from_transactions
+
+from fastapi import Depends
+from app.core.security import get_current_firebase_user, check_user_access
 
 router = APIRouter(prefix="/v1", tags=["insights"])
 
@@ -19,9 +22,11 @@ def get_insights(
     period: Optional[str] = Query(None, description="weekly, monthly, or custom"),
     start_date: Optional[datetime] = Query(None),
     end_date: Optional[datetime] = Query(None),
+    current_user=Depends(get_current_firebase_user),
     db: Session = Depends(get_db),
 ) -> Dict[str, Any]:
     start_time = time.time()
+    check_user_access(current_user, user_id)
 
     if period not in (None, "weekly", "monthly", "custom"):
         log_api_event(

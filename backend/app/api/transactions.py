@@ -8,6 +8,11 @@ from sqlalchemy.orm import Session
 
 from app.core.db import get_db
 from app.core.logger import log_api_event
+from app.core.security import (
+    get_current_firebase_user,
+    check_user_access,
+    require_admin,
+)
 from app.models.transaction import Transaction
 from app.clients.categorization_client import categorize_via_service
 from app.services.insights.merchant_tokenizer import build_merchant_token
@@ -52,8 +57,15 @@ class CategoryUpdateIn(BaseModel):
 
 
 @router.post("/transactions:ingest", response_model=IngestResponse)
-def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends(get_db)):
+def ingest_transactions(
+    transactions: List[TransactionIn],
+    current_user=Depends(get_current_firebase_user),
+    db: Session = Depends(get_db),
+):
     start_time = time.time()
+
+    # Only bank/admin authenticated clients can ingest transactions.
+    require_admin(current_user)
 
     accepted = 0
     rejected = 0
@@ -193,8 +205,14 @@ def ingest_transactions(transactions: List[TransactionIn], db: Session = Depends
 
 
 @router.get("/transactions")
-def list_transactions(user_id: str, db: Session = Depends(get_db)):
+def list_transactions(
+    user_id: str,
+    current_user=Depends(get_current_firebase_user),
+    db: Session = Depends(get_db),
+):
     start_time = time.time()
+
+    check_user_access(current_user, user_id)
 
     txs = (
         db.query(Transaction)
@@ -246,8 +264,15 @@ def list_transactions(user_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/transactions/{transaction_id}/category")
-def get_transaction_category(transaction_id: str, user_id: str, db: Session = Depends(get_db)):
+def get_transaction_category(
+    transaction_id: str,
+    user_id: str,
+    current_user=Depends(get_current_firebase_user),
+    db: Session = Depends(get_db),
+):
     start_time = time.time()
+
+    check_user_access(current_user, user_id)
 
     tx = (
         db.query(Transaction)
@@ -306,8 +331,15 @@ def get_transaction_category(transaction_id: str, user_id: str, db: Session = De
 
 
 @router.get("/transactions/{transaction_id}")
-def get_transaction(transaction_id: str, user_id: str, db: Session = Depends(get_db)):
+def get_transaction(
+    transaction_id: str,
+    user_id: str,
+    current_user=Depends(get_current_firebase_user),
+    db: Session = Depends(get_db),
+):
     start_time = time.time()
+
+    check_user_access(current_user, user_id)
 
     tx = (
         db.query(Transaction)
@@ -375,9 +407,12 @@ def update_transaction_category(
     transaction_id: str,
     payload: CategoryUpdateIn,
     user_id: str,
+    current_user=Depends(get_current_firebase_user),
     db: Session = Depends(get_db),
 ):
     start_time = time.time()
+
+    check_user_access(current_user, user_id)
 
     tx = (
         db.query(Transaction)
