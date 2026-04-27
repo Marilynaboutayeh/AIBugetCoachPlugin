@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 from fastapi import FastAPI, Depends
 
 from app.core.db import engine, Base
@@ -6,6 +8,7 @@ from app.api.insights import router as insights_router
 from app.models.transaction import Transaction
 from app.core.firebase import initialize_firebase
 from app.api import chat
+
 from app.core.security import (
     get_current_firebase_user,
     get_user_role,
@@ -13,6 +16,7 @@ from app.core.security import (
     check_user_access
 )
 
+load_dotenv()
 
 # Initialize Firebase Admin SDK
 initialize_firebase()

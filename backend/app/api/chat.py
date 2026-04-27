@@ -19,7 +19,7 @@ from app.services.chatbot.predefined_questions import (
 )
 from app.services.chatbot.response_builder import build_chat_response
 from app.services.insights.insight_engine import generate_insights_from_transactions
-
+from app.services.chatbot.openai_response import generate_openai_chat_answer
 
 router = APIRouter(prefix="/v1/chat", tags=["Chatbot"])
 
@@ -171,10 +171,32 @@ def chat_query(
     # 7. Build chatbot response using only the generated insights
     response = build_chat_response(intent, insights)
 
+    # return {
+    #     "resolved_user_id": resolved_user_id,
+    #     "question_id": request.question_id,
+    #     "question": request.question,
+    #     "intent": intent.value,
+    #     **response,
+    # }
+
+    base_answer = response["answer"]
+
+    final_answer = generate_openai_chat_answer(
+        intent=intent.value,
+        base_answer=base_answer,
+        used_data=response.get("used_data", {}),
+        data_sources=response.get("data_sources", []),
+        user_question=request.question,
+    )
+
     return {
         "resolved_user_id": resolved_user_id,
         "question_id": request.question_id,
         "question": request.question,
         "intent": intent.value,
-        **response,
+        "answer": final_answer,
+        "base_answer": base_answer,
+        "confidence": response.get("confidence"),
+        "used_data": response.get("used_data", {}),
+        "data_sources": response.get("data_sources", []),
     }
