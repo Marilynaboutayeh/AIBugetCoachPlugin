@@ -6,6 +6,11 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
+from app.core.security import (
+    get_authenticated_anon_user_id,
+    get_current_firebase_user,
+    is_admin_user,
+)
 from app.models.transaction import Transaction
 from app.services.chatbot.intent_detector import ChatIntent, detect_intent_from_text
 from app.services.chatbot.predefined_questions import (
@@ -20,12 +25,15 @@ router = APIRouter(prefix="/v1/chat", tags=["Chatbot"])
 
 
 class ChatQueryRequest(BaseModel):
-    user_id: str
     question_id: Optional[str] = None
     question: Optional[str] = None
     period: Optional[str] = None
     start_date: Optional[str] = None
     end_date: Optional[str] = None
+
+    # Only admins can use this field.
+    # Normal users must not send it.
+    target_user_id: Optional[str] = None
 
 
 def _parse_optional_datetime(value: Optional[str], field_name: str) -> Optional[datetime]:
@@ -46,10 +54,45 @@ def _parse_optional_datetime(value: Optional[str], field_name: str) -> Optional[
         )
 
 
-@router.get("/questions")
-def list_chat_questions():
+def _resolve_chat_user_id(
+    current_user: dict,
+    target_user_id: Optional[str],
+) -> str:
     """
-    Returns the predefined questions that the frontend can display as buttons.
+    Resolves which anonymized user_id the chatbot should use.
+
+    Normal user:
+    - user_id is derived automatically from Firebase token email
+      using config/access_control.csv.
+
+    Admin:
+    - must provide target_user_id.
+    """
+
+    if is_admin_user(current_user):
+        if not target_user_id:
+            raise HTTPException(
+                status_code=400,
+                detail="Admin users must provide target_user_id for chatbot queries."
+            )
+
+        return target_user_id
+
+    if target_user_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Normal users cannot specify target_user_id."
+        )
+
+    return get_authenticated_anon_user_id(current_user)
+
+
+@router.get("/questions")
+def list_chat_questions(
+    current_user: dict = Depends(get_current_firebase_user),
+):
+    """
+    Returns predefined chatbot questions for authenticated users.
     """
 
     return {
@@ -61,6 +104,7 @@ def list_chat_questions():
 def chat_query(
     request: ChatQueryRequest,
     db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_firebase_user),
 ):
     """
     Controlled conversational query endpoint.
@@ -71,25 +115,35 @@ def chat_query(
     Fallback path:
     - If question_id is missing, try to detect intent from free-text question.
 
-    The answer is generated only from analyzed transaction insights.
+    Authorization:
+    - Normal users do not send user_id.
+    - Their anonymized user_id is derived from the authenticated Firebase user.
+    - Admin users must provide target_user_id.
     """
 
-    # 1. Resolve intent
+    # 1. Resolve which anonymized user_id to use
+    resolved_user_id = _resolve_chat_user_id(
+        current_user=current_user,
+        target_user_id=request.target_user_id,
+    )
+
+    # 2. Resolve intent
     if request.question_id:
         intent = get_intent_from_question_id(request.question_id)
     else:
         intent = detect_intent_from_text(request.question)
 
-    # 2. If unsupported, return directly without querying transactions
+    # 3. If unsupported, return directly without querying transactions
     if intent == ChatIntent.UNSUPPORTED:
         return {
+            "resolved_user_id": resolved_user_id,
             "question_id": request.question_id,
             "question": request.question,
             "intent": intent.value,
             **build_chat_response(intent, insights={}),
         }
 
-    # 3. Validate custom period
+    # 4. Validate custom period
     start_date = _parse_optional_datetime(request.start_date, "start_date")
     end_date = _parse_optional_datetime(request.end_date, "end_date")
 
@@ -99,14 +153,14 @@ def chat_query(
             detail="start_date and end_date are required when period is custom."
         )
 
-    # 4. Fetch this user's transactions from the database
+    # 5. Fetch only the resolved anonymized user's transactions
     txs = (
         db.query(Transaction)
-        .filter(Transaction.user_id == request.user_id)
+        .filter(Transaction.user_id == resolved_user_id)
         .all()
     )
 
-    # 5. Generate insights using your existing insight engine
+    # 6. Generate insights using your existing insight engine
     insights = generate_insights_from_transactions(
         txs=txs,
         period=request.period,
@@ -114,10 +168,11 @@ def chat_query(
         end_date=end_date,
     )
 
-    # 6. Build chatbot response using only the generated insights
+    # 7. Build chatbot response using only the generated insights
     response = build_chat_response(intent, insights)
 
     return {
+        "resolved_user_id": resolved_user_id,
         "question_id": request.question_id,
         "question": request.question,
         "intent": intent.value,

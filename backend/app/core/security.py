@@ -73,6 +73,7 @@ def require_admin(current_user: dict):
     return current_user
 
 
+
 def check_user_access(current_user: dict, requested_user_id: str):
     """
     Authorization rule:
@@ -95,3 +96,48 @@ def check_user_access(current_user: dict, requested_user_id: str):
         )
 
     return True
+
+def get_authenticated_anon_user_id(current_user: dict) -> str:
+    """
+    Returns the anonymized user_id mapped to the authenticated Firebase user's email.
+
+    Used by endpoints where normal users should not send user_id manually,
+    such as the chatbot endpoint.
+    """
+
+    admin_emails, user_email_to_anon_id = load_access_control_rules()
+    email = current_user.get("email", "").strip().lower()
+
+    if not email:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authenticated user email was not found in token"
+        )
+
+    if email in admin_emails:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Admin users must specify an anonymized user context"
+        )
+
+    anon_user_id = user_email_to_anon_id.get(email)
+
+    if not anon_user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="No anonymized user mapping found for this authenticated user"
+        )
+
+    return anon_user_id
+
+
+def is_admin_user(current_user: dict) -> bool:
+    """
+    Returns True if the authenticated Firebase user is listed as admin
+    in the private access_control.csv file.
+    """
+
+    admin_emails, _ = load_access_control_rules()
+    email = current_user.get("email", "").strip().lower()
+
+    return email in admin_emails
