@@ -29,6 +29,7 @@ def _safe_merchant_token(tx: Transaction) -> str:
 
     return "unknown"
 
+
 def build_specific_anomaly_summary(
     anomalies: List[Dict[str, Any]],
     period_label: str,
@@ -104,6 +105,7 @@ def build_specific_anomaly_summary(
         f"One example with {severity} severity is: {detail}"
     )
 
+
 def generate_insights_from_transactions(
     txs: List[Transaction],
     period: Optional[str] = None,
@@ -115,12 +117,13 @@ def generate_insights_from_transactions(
 
     spending_by_category: Dict[str, float] = {}
 
-    
     spending_by_merchant: Dict[str, Dict[str, Any]] = {}
     current_period_merchant_counts: Dict[str, int] = {}
 
     current_period_spending = 0.0
     previous_period_spending = 0.0
+    change_amount = None
+    change_percentage = None
 
     now = datetime.now()
 
@@ -243,6 +246,17 @@ def generate_insights_from_transactions(
 
     current_period_spending = total_spent
 
+    # ---------- comparison fields ----------
+    if period in ("weekly", "monthly", "custom"):
+        change_amount = current_period_spending - previous_period_spending
+
+        if previous_period_spending > 0:
+            change_percentage = (
+                change_amount / previous_period_spending
+            ) * 100
+        else:
+            change_percentage = None
+
     # ---------- top category ----------
     top_category = None
     top_category_amount = 0.0
@@ -264,18 +278,13 @@ def generate_insights_from_transactions(
     # ---------- 1) spending trend insight ----------
     if period in ("weekly", "monthly", "custom"):
         if previous_period_spending > 0:
-            change_percent = (
-                (current_period_spending - previous_period_spending)
-                / previous_period_spending
-            ) * 100
-
             if current_period_spending > previous_period_spending:
                 insights_text.append(
-                    f"Your spending during {period_label} has increased by {abs(change_percent):.0f}% compared to {previous_period_label}."
+                    f"Your spending during {period_label} has increased by {abs(change_percentage):.0f}% compared to {previous_period_label}."
                 )
             elif current_period_spending < previous_period_spending:
                 insights_text.append(
-                    f"Your spending during {period_label} has decreased by {abs(change_percent):.0f}% compared to {previous_period_label}."
+                    f"Your spending during {period_label} has decreased by {abs(change_percentage):.0f}% compared to {previous_period_label}."
                 )
             else:
                 insights_text.append(
@@ -301,7 +310,6 @@ def generate_insights_from_transactions(
 
     if repeated_merchants:
         repeated_merchant_token = repeated_merchants[0]
-        # repeated_merchant_name = spending_by_merchant[repeated_merchant_token]["merchant"]
 
         insights_text.append(
             f"You made multiple purchases at {repeated_merchant_token} during {period_label}."
@@ -310,7 +318,6 @@ def generate_insights_from_transactions(
     # ---------- 3) spending concentration insight ----------
     if top_merchants and total_spent > 0:
         top_merchant = top_merchants[0]
-        # top_merchant_name = top_merchant["merchant"]
         top_merchant_name = top_merchant["merchant_token"]
         top_merchant_amount = top_merchant["amount"]
 
@@ -343,12 +350,6 @@ def generate_insights_from_transactions(
             )
 
     # ---------- 6) anomaly insight ----------
-    # if anomaly_results["anomaly_count"] > 0:
-    #     insights_text.append(
-    #         f"{anomaly_results['anomaly_count']} unusual spending transaction(s) were detected during {period_label}."
-    #     )
-
-    # ---------- 6) anomaly insight ----------
     anomaly_summary = build_specific_anomaly_summary(
         anomalies=anomaly_results["anomalies"],
         period_label=period_label,
@@ -359,11 +360,24 @@ def generate_insights_from_transactions(
 
     return {
         "period": period,
+        "period_label": period_label,
+        "previous_period_label": previous_period_label,
         "start_date": start_current.isoformat() if start_current else None,
         "end_date": end_current.isoformat() if end_current else None,
+        "previous_start_date": start_previous.isoformat() if start_previous else None,
+        "previous_end_date": end_previous.isoformat() if end_previous else None,
+
         "transaction_count": len(filtered_txs),
+
         "total_spent": round(total_spent, 2),
         "total_income": round(total_income, 2),
+
+        # New comparison fields for chatbot/UI
+        "current_total_spent": round(current_period_spending, 2),
+        "previous_total_spent": round(previous_period_spending, 2),
+        "change_amount": round(change_amount, 2) if change_amount is not None else None,
+        "change_percentage": round(change_percentage, 2) if change_percentage is not None else None,
+
         "spend_by_category": {
             category: round(amount, 2)
             for category, amount in spending_by_category.items()

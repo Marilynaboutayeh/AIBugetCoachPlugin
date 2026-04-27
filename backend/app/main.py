@@ -5,6 +5,7 @@ from app.api.transactions import router as transactions_router
 from app.api.insights import router as insights_router
 from app.models.transaction import Transaction
 from app.core.firebase import initialize_firebase
+from app.api import chat
 from app.core.security import (
     get_current_firebase_user,
     get_user_role,
@@ -68,3 +69,4 @@ def user_access_test(
 
 app.include_router(transactions_router)
 app.include_router(insights_router)
+app.include_router(chat.router)
