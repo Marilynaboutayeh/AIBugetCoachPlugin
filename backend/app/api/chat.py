@@ -16,6 +16,7 @@ from app.services.chatbot.intent_detector import ChatIntent, detect_intent_from_
 from app.services.chatbot.predefined_questions import (
     get_available_questions,
     get_intent_from_question_id,
+    get_question_text_from_id,
 )
 from app.services.chatbot.response_builder import build_chat_response
 from app.services.insights.insight_engine import generate_insights_from_transactions
@@ -86,6 +87,42 @@ def _resolve_chat_user_id(
 
     return get_authenticated_anon_user_id(current_user)
 
+def _build_openai_used_data(
+    request: ChatQueryRequest,
+    insights: dict,
+    response: dict,
+) -> dict:
+    """
+    Builds a compact and safe context for OpenAI.
+
+    This gives OpenAI enough analyzed data to personalize the wording,
+    without sending raw transactions or sensitive information.
+    """
+
+    anomalies = insights.get("anomalies", [])
+
+    return {
+        "period": request.period,
+        "start_date": request.start_date,
+        "end_date": request.end_date,
+
+        # Deterministic chatbot result
+        "base_used_data": response.get("used_data", {}),
+
+        # Compact analyzed insight summary
+        "summary": {
+            "total_spent": insights.get("total_spent"),
+            "spend_by_category": insights.get("spend_by_category"),
+            "top_category": insights.get("top_category"),
+
+            "current_total_spent": insights.get("current_total_spent"),
+            "previous_total_spent": insights.get("previous_total_spent"),
+            "change_amount": insights.get("change_amount"),
+            "change_percentage": insights.get("change_percentage"),
+
+            "anomaly_count": len(anomalies) if isinstance(anomalies, list) else 0,
+        },
+    }
 
 @router.get("/questions")
 def list_chat_questions(
@@ -179,24 +216,59 @@ def chat_query(
     #     **response,
     # }
 
+    # base_answer = response["answer"]
+
+    # final_answer = generate_openai_chat_answer(
+    #     intent=intent.value,
+    #     base_answer=base_answer,
+    #     used_data=response.get("used_data", {}),
+    #     data_sources=response.get("data_sources", []),
+    #     user_question=request.question,
+    # )
     base_answer = response["answer"]
+
+    effective_question = request.question
+
+    if not effective_question and request.question_id:
+        effective_question = get_question_text_from_id(request.question_id)
+
+    openai_used_data = _build_openai_used_data(
+        request=request,
+        insights=insights,
+        response=response,
+    )
 
     final_answer = generate_openai_chat_answer(
         intent=intent.value,
         base_answer=base_answer,
-        used_data=response.get("used_data", {}),
+        used_data=openai_used_data,
         data_sources=response.get("data_sources", []),
-        user_question=request.question,
+        # user_question=request.question,
+        user_question=effective_question,
     )
+
+    # return {
+    #     "resolved_user_id": resolved_user_id,
+    #     "question_id": request.question_id,
+    #     "question": request.question,
+    #     "intent": intent.value,
+    #     "answer": final_answer,
+    #     "base_answer": base_answer,
+    #     "confidence": response.get("confidence"),
+    #     "used_data": response.get("used_data", {}),
+    #     "data_sources": response.get("data_sources", []),
+    # }
 
     return {
         "resolved_user_id": resolved_user_id,
         "question_id": request.question_id,
         "question": request.question,
-        "intent": intent.value,
+        "effective_question": effective_question,
+        "intent": intent.value, 
         "answer": final_answer,
         "base_answer": base_answer,
         "confidence": response.get("confidence"),
         "used_data": response.get("used_data", {}),
+        "openai_used_data": openai_used_data,
         "data_sources": response.get("data_sources", []),
     }

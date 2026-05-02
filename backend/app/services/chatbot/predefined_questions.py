@@ -60,3 +60,19 @@ def get_intent_from_question_id(question_id: Optional[str]) -> ChatIntent:
         return ChatIntent.UNSUPPORTED
 
     return ChatIntent(question_data["intent"])
+
+def get_question_text_from_id(question_id: Optional[str]) -> Optional[str]:
+    """
+    Returns the human-readable predefined question text.
+    Used so OpenAI receives the real question even when the user clicked a button.
+    """
+
+    if not question_id:
+        return None
+
+    question_data = PREDEFINED_QUESTIONS.get(question_id)
+
+    if not question_data:
+        return None
+
+    return question_data["question"]
