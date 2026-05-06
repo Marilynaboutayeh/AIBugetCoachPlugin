@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.core.db import engine, Base
 from app.api.transactions import router as transactions_router
 from app.api.insights import router as insights_router
+from app.api.forecast import router as forecast_router
 from app.models.transaction import Transaction
 
 app = FastAPI(title="AI Budget Coach Plugin")
@@ -16,3 +17,4 @@ def health():
 
 app.include_router(transactions_router)
 app.include_router(insights_router)
+app.include_router(forecast_router)

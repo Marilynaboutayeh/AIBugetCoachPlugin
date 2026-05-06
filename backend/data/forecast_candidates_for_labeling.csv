@@ -1,0 +1,324 @@
+merchant_token,mcc,main_category,amount_avg,amount_std,interval_avg_days,interval_std_days,occurrence_count,is_recurring
+acs ortel,4814,bills and utilities,88.82,45.21,53.83,49.0,7,1
+acs three,4814,bills and utilities,102.29,50.63,19.19,27.51,37,1
+action,5310,shopping,62.34,32.0,357.0,0.0,2,0
+aib eco,7995,entertainment & leisure,109.61,54.04,27.54,22.17,14,0
+aimskinz eur,5816,shopping,92.25,52.78,597.0,0.0,2,0
+airbaltic,4511,travel & airlines,51.68,31.31,157.5,147.03,5,0
+albert heijn,5411,groceries,95.66,46.08,190.0,91.93,4,0
+albert vam dekuje,5411,groceries,143.08,33.79,58.5,60.82,5,0
+aldi receipt,5411,groceries,67.98,7.6,224.0,275.77,3,0
+aldi sued,5411,groceries,51.83,47.91,314.5,101.12,3,0
+alnatura produktions,5411,groceries,93.86,74.62,335.0,0.0,2,0
+amazon,5399,shopping,119.38,53.11,5.48,10.98,127,0
+amzn mktp,5999,shopping,76.03,62.54,87.5,37.48,3,0
+apple,5732,electronics & home,70.3,70.23,150.0,152.42,4,0
+apple italy,5732,electronics & home,166.96,27.11,205.0,0.0,2,0
+aral station,5541,fuel & automotive,81.39,57.98,172.25,120.54,5,0
+asda superstore,5411,groceries,70.87,20.9,215.0,0.0,2,0
+asos,5691,clothing & apparel,168.45,3.65,183.0,0.0,2,0
+autogrill,5812,restaurants & dining,167.14,11.91,269.0,0.0,2,0
+automaten,4112,transport & taxis,54.54,32.14,44.0,19.8,3,0
+avast,5817,shopping,91.73,41.87,242.0,0.0,2,1
+avis rent car,3389,transport & taxis,51.62,36.02,239.5,207.18,3,0
+avm,4111,transport & taxis,91.77,51.49,54.0,47.62,11,0
+babbel,8299,education,62.07,45.58,231.0,0.0,2,1
+baeckerei konditorei,5462,groceries,42.14,45.65,387.0,0.0,2,0
+benzina,5541,fuel & automotive,89.18,95.03,174.0,0.0,2,0
+bilet,4111,transport & taxis,93.64,59.89,84.5,61.38,7,0
+billa dankt,5411,groceries,127.97,51.46,95.0,79.38,7,0
+bolt,4121,transport & taxis,104.54,60.59,19.0,22.92,34,0
+bolt,4789,transport & taxis,89.73,65.22,255.5,101.12,3,0
+bolt,5812,restaurants & dining,97.8,60.89,26.58,27.06,27,0
+boost,4899,bills and utilities,173.06,32.79,336.0,0.0,2,1
+boost,5815,shopping,141.26,63.06,128.67,92.95,4,0
+boots,5912,health & pharmacy,106.87,90.56,178.5,135.06,3,0
+burger king,5814,restaurants & dining,124.79,57.57,46.5,65.76,3,0
+burger king sot,5814,restaurants & dining,141.64,66.05,0.0,0.0,2,0
+buzzsprout invoice,7372,professional services,103.87,31.96,388.0,0.0,2,1
+carlundcarla bsmrg,7512,fuel & automotive,164.46,31.32,304.0,0.0,2,0
+cars taxi services,4111,transport & taxis,62.36,35.63,661.0,0.0,2,0
+casino,5411,groceries,86.12,30.77,120.0,0.0,2,0
+ceska posta,9402,professional services,92.44,82.21,170.33,148.18,4,0
+ceske drahy,4112,transport & taxis,95.94,98.68,628.0,0.0,2,0
+cinema,5815,shopping,187.76,8.1,1.0,0.0,2,0
+conad,5411,groceries,121.8,3.42,30.0,0.0,2,0
+coop,5411,groceries,121.19,60.34,193.5,231.22,3,0
+corte ingles,5311,shopping,80.4,69.83,60.0,0.0,2,0
+cvs pharmacy,5912,health & pharmacy,117.58,62.89,77.0,78.12,6,0
+decathlon deutschland,5941,shopping,92.16,87.48,173.0,0.0,2,0
+deezereurope,5815,shopping,70.73,70.63,357.0,0.0,2,1
+delijn hash,4111,transport & taxis,103.51,55.06,18.16,20.04,39,0
+depa baer,6051,financial services,75.84,43.14,223.0,101.82,3,0
+deutsche,3008,travel & airlines,97.3,112.94,122.0,0.0,2,0
+dpb,4111,transport & taxis,136.34,44.29,356.0,0.0,2,0
+drogerie markt,5912,health & pharmacy,117.16,31.85,91.0,0.0,2,0
+dropbox,4816,bills and utilities,84.2,73.7,208.5,166.17,3,1
+dubai taxi,4111,transport & taxis,75.53,47.39,222.5,275.06,3,0
+dynamic parcel distrib,4215,transport & taxis,137.57,70.03,1.0,0.0,2,0
+east shopping center,5399,shopping,152.82,36.96,30.0,0.0,2,0
+ege,4722,travel & airlines,131.48,14.06,63.0,0.0,2,0
+eleven,5541,fuel & automotive,84.15,31.08,223.0,144.25,3,0
+eni,5541,fuel & automotive,136.79,84.4,567.0,0.0,2,0
+entertai,4899,bills and utilities,96.63,89.37,209.0,7.07,3,1
+entertai,5815,shopping,144.0,36.93,153.0,0.0,2,1
+ents,4899,bills and utilities,121.5,69.91,73.11,85.33,10,1
+ents,5815,shopping,97.24,58.68,85.86,107.21,8,1
+ernsting family,5651,clothing & apparel,116.51,49.83,87.0,33.94,3,0
+exaring,7399,professional services,102.68,80.51,72.0,37.24,4,1
+farmfoods,5411,groceries,25.75,2.73,184.0,0.0,2,0
+fernverkehr,5812,restaurants & dining,86.28,45.52,193.0,229.1,3,0
+first event,7999,entertainment & leisure,111.9,14.04,0.0,0.0,2,0
+flyeralarm,7338,professional services,63.09,43.53,214.0,0.0,2,0
+foodora,5499,groceries,106.24,58.85,8.23,12.62,85,0
+foodora aceg,5499,groceries,147.78,62.38,330.0,294.16,3,0
+foodora cwld,5499,groceries,114.2,93.81,113.0,0.0,2,0
+foodora gldf,5499,groceries,65.64,9.3,58.0,0.0,2,0
+foodora hvvr,5499,groceries,94.06,75.44,151.0,0.0,2,0
+foodora sub,5499,groceries,117.27,70.03,69.0,68.62,11,0
+free for,5815,shopping,75.11,22.8,628.0,0.0,2,0
+glovo,4215,transport & taxis,165.87,2.86,32.0,0.0,2,0
+glshungarykft,4215,transport & taxis,135.56,53.05,234.0,0.0,2,0
+gopay medovinarna,5921,bars & alcohol,51.02,23.58,538.0,0.0,2,0
+gopay nahradni dily,5533,fuel & automotive,126.58,29.2,33.0,0.0,2,0
+gopay navlas,5977,beauty & personal care,118.51,65.92,417.0,0.0,2,0
+gopay nazuby,5999,shopping,67.77,13.05,691.0,0.0,2,0
+gopay prozdravevlasy,5977,beauty & personal care,82.48,74.78,265.0,0.0,2,0
+gopay reenio,7941,entertainment & leisure,43.0,2.85,94.0,0.0,2,0
+gopay restorio,5942,entertainment & leisure,110.0,107.12,274.0,0.0,2,0
+grab,4121,transport & taxis,75.32,80.92,109.0,115.57,4,0
+grab,5499,groceries,84.89,89.51,153.0,0.0,2,0
+grab,5812,restaurants & dining,100.75,88.71,169.0,163.41,4,0
+happytiger,7995,entertainment & leisure,95.45,52.18,57.18,57.69,12,0
+hayu,4899,bills and utilities,94.98,79.64,104.5,89.1,5,1
+hayu mon,5815,shopping,125.24,64.5,59.0,0.0,2,1
+heroku may,5734,electronics & home,68.9,79.04,30.0,0.0,2,1
+heroku nov,5734,electronics & home,80.42,86.3,149.33,60.91,4,1
+highroller,7995,entertainment & leisure,104.29,123.5,214.0,0.0,2,0
+hypedrop,7994,entertainment & leisure,90.56,52.09,81.57,104.24,8,0
+istishari hospital,8062,health & pharmacy,136.06,33.72,150.0,0.0,2,0
+jmp biedronka,5411,groceries,141.18,68.52,179.67,186.32,4,0
+jones the grocer,5812,restaurants & dining,99.42,11.52,118.0,0.0,2,0
+kaufland,5411,groceries,102.27,74.76,172.5,118.45,5,0
+kruidvat,5331,shopping,148.77,45.1,237.5,47.38,3,0
+land baden wuerttember,9399,government and taxes,100.17,117.17,143.0,0.0,2,0
+landesbetrieb verkehr,9399,government and taxes,139.14,82.77,267.0,0.0,2,0
+lawson,5499,groceries,65.97,81.32,51.0,0.0,2,0
+lekarna max,5912,health & pharmacy,148.32,21.08,60.0,0.0,2,0
+lidl,5411,groceries,93.21,68.21,63.22,45.58,10,0
+lidl aruhaz,5411,groceries,143.46,0.88,84.0,0.0,2,0
+lidl dankt,5411,groceries,152.2,45.04,386.0,0.0,2,0
+lidl dekuje nakup,5411,groceries,116.54,65.25,315.5,275.06,3,0
+lidl dienstleistung,5411,groceries,44.46,9.18,223.5,102.53,3,0
+lidl ireland,5411,groceries,94.54,21.38,122.0,0.0,2,0
+lidl sagt danke,5411,groceries,102.64,39.94,89.86,78.71,8,0
+lime,4789,transport & taxis,121.47,56.17,328.0,0.0,2,0
+lime auth,4789,transport & taxis,95.69,19.33,30.0,0.0,2,0
+lime bestanden,4789,transport & taxis,89.55,70.82,131.5,142.13,3,0
+lime cost cursa,4789,transport & taxis,85.8,62.43,123.5,86.97,3,0
+lime fahrt,4789,transport & taxis,137.53,78.09,149.33,135.31,4,0
+lime geslaagd,4789,transport & taxis,78.53,84.49,30.0,0.0,2,0
+lime jizda,7519,fuel & automotive,54.13,26.83,62.0,0.0,2,0
+lime paiement,4789,transport & taxis,154.94,8.15,417.0,0.0,2,0
+lime pass,4789,transport & taxis,81.22,71.06,77.4,53.45,6,0
+lime ride,4789,transport & taxis,118.08,46.37,44.86,53.6,15,0
+lime ride,7519,fuel & automotive,158.98,7.25,123.0,0.0,2,0
+lime trajet,4789,transport & taxis,105.8,75.21,31.0,29.51,4,0
+lojas americanas,5311,shopping,160.78,50.32,599.0,0.0,2,0
+macys herald square,5311,shopping,173.25,25.1,61.0,0.0,2,0
+mariacasino,7995,entertainment & leisure,89.88,5.57,154.0,0.0,2,0
+marks,5411,groceries,135.95,28.48,30.0,0.0,2,0
+marks spencer plc,5411,groceries,65.7,41.75,93.0,0.0,2,0
+mcdonald,5814,restaurants & dining,102.29,19.77,571.0,0.0,2,0
+mcdonalds,5812,restaurants & dining,141.55,72.72,128.67,195.65,4,0
+mcdonalds,5814,restaurants & dining,73.44,50.87,74.33,74.92,7,0
+media markt,5732,electronics & home,116.42,91.05,60.0,0.0,2,0
+metro barcelona,4111,transport & taxis,107.04,88.47,358.0,0.0,2,0
+metropole mob,4111,transport & taxis,160.99,58.51,105.0,79.25,7,0
+microsoft,5045,electronics & home,95.84,52.87,50.77,39.93,14,1
+moonpay,6051,financial services,81.41,68.09,77.0,106.07,3,0
+moonpay exodus,6051,financial services,150.56,23.86,159.33,87.24,4,0
+moonpay metamask,6051,financial services,86.5,62.17,159.0,41.94,4,0
+moonpay shufflecom,7995,entertainment & leisure,74.88,3.34,355.0,0.0,2,0
+moonpay trustwallet,6051,financial services,128.02,54.32,189.67,98.1,4,0
+moonpay uniswap,6051,financial services,144.94,22.04,173.0,0.0,2,0
+morrison,5411,groceries,45.02,49.56,207.0,0.0,2,0
+morrison plc,5411,groceries,135.5,75.01,213.0,0.0,2,0
+mta nyct paygo,4111,transport & taxis,103.32,122.07,151.0,0.0,2,0
+muff haushalt,5251,electronics & home,141.35,42.02,275.0,0.0,2,0
+netto marken discount,5411,groceries,152.11,52.92,149.5,7.78,3,0
+nlov hash,4111,transport & taxis,96.9,54.22,68.43,62.35,8,0
+norton,5817,shopping,97.49,69.67,159.0,78.73,4,1
+notemachine,6011,financial services,180.42,8.75,539.0,0.0,2,0
+nova,4899,bills and utilities,109.3,54.64,12.8,16.49,55,1
+now,5815,shopping,85.6,111.55,123.0,0.0,2,0
+now boost,5815,shopping,153.2,35.67,118.0,7.07,3,1
+now entertai,5815,shopping,89.92,56.04,75.0,43.54,9,1
+now ents,5815,shopping,88.01,57.24,66.33,43.58,10,1
+now sky cine,5815,shopping,105.72,31.47,215.0,0.0,2,0
+now sky spor,5815,shopping,122.42,74.89,87.67,73.92,4,1
+now sports,5815,shopping,120.66,57.57,208.0,134.35,3,0
+now ultra,5815,shopping,132.65,37.88,110.75,67.4,5,1
+nya hering sanikonzept,5499,groceries,27.34,13.73,296.0,0.0,2,0
+nya sanitronics intern,5499,groceries,92.1,117.22,62.0,0.0,2,0
+nyx asovendingsro,5499,groceries,101.89,74.62,164.0,100.41,3,0
+nyx avantagescafe,5814,restaurants & dining,107.16,55.48,119.0,0.0,2,0
+nyx vendingwork,5499,groceries,135.07,9.23,92.0,0.0,2,0
+nyx vendingwork,5814,restaurants & dining,50.79,1.47,1.0,0.0,2,0
+nyx verygoodiesas,5499,groceries,186.8,3.75,121.0,0.0,2,0
+nyx verygoodiesas,5814,restaurants & dining,122.64,85.02,510.0,0.0,2,0
+omv,5541,fuel & automotive,183.29,14.85,76.5,20.51,3,0
+otp,4814,bills and utilities,90.18,77.55,355.0,0.0,2,1
+panera bread,5814,restaurants & dining,148.91,25.1,90.5,82.73,3,0
+paypal airbnb,7011,hotels & accommodation,69.38,39.96,53.0,67.97,14,0
+paypal mcdonalds,5812,restaurants & dining,121.99,66.19,172.0,0.0,2,0
+paypal spotify,5815,shopping,90.87,54.32,45.93,37.76,16,1
+paypal temu,5311,shopping,75.69,69.25,388.0,0.0,2,0
+paypal wow ente,4899,bills and utilities,22.13,12.42,268.5,205.77,3,0
+paypal wow premium,4899,bills and utilities,155.99,55.12,56.0,46.67,3,1
+peacock premium,4899,bills and utilities,19.1,17.46,355.0,0.0,2,1
+pizzeria,5812,restaurants & dining,142.66,65.02,356.0,0.0,2,0
+planity,7230,beauty & personal care,75.4,18.63,476.0,0.0,2,0
+planity,7298,beauty & personal care,114.29,58.64,385.0,0.0,2,0
+profi rom food srl,5411,groceries,17.3,16.45,201.0,0.0,2,0
+protv,4899,bills and utilities,68.6,64.67,27.93,33.59,16,1
+publix,5411,groceries,109.7,70.32,92.0,2.83,3,0
+qatar,3136,travel & airlines,122.36,52.67,149.0,150.09,4,0
+ratp,4111,transport & taxis,92.03,42.16,150.25,85.87,5,0
+renfe cercanias tna,4112,transport & taxis,127.8,89.22,90.0,84.85,3,0
+revolut,4829,bills and utilities,23.94,2.14,90.0,0.0,2,1
+roi basi,4899,bills and utilities,102.14,46.0,102.0,55.15,3,0
+rossmann,5912,health & pharmacy,182.43,7.48,135.0,90.79,5,0
+rossmann,5977,beauty & personal care,150.1,12.52,477.0,0.0,2,0
+rtl interactive gmbh,7399,professional services,151.86,44.84,297.0,0.0,2,0
+sainsbury,5411,groceries,136.16,90.14,539.0,0.0,2,0
+sainsburys mkts,5411,groceries,85.84,92.65,355.0,0.0,2,0
+sameday,4215,transport & taxis,78.32,59.14,295.0,0.0,2,0
+selecta merchant vendi,5499,groceries,94.12,50.61,193.0,270.11,3,0
+sem mobilite cum,4111,transport & taxis,83.99,56.6,209.0,253.14,3,0
+shell,5541,fuel & automotive,74.76,66.23,69.0,54.04,11,0
+skanetrafiken blippa,4131,transport & taxis,117.74,73.98,60.0,0.0,2,0
+sky cine,4899,bills and utilities,67.26,4.52,242.0,0.0,2,1
+sky spor,4899,bills and utilities,93.91,49.29,95.6,78.21,6,1
+skyshowtime show,4899,bills and utilities,112.23,58.79,81.57,82.78,8,1
+skyshowtime showtim,4899,bills and utilities,103.0,51.44,85.0,101.84,7,1
+skyshowtime shtanda,4899,bills and utilities,94.84,60.38,49.78,58.88,10,1
+skyshowtime stan,4899,bills and utilities,87.9,65.97,40.59,45.39,18,1
+skyshowtime standar,4899,bills and utilities,117.06,51.19,36.32,37.33,20,1
+slovnaft,5541,fuel & automotive,97.77,26.0,120.25,132.66,5,0
+spc bvb event cateri,5811,restaurants & dining,113.9,57.45,481.0,0.0,2,0
+spilnu,7995,entertainment & leisure,80.22,65.41,57.67,74.46,4,0
+splru lyo,4111,transport & taxis,128.35,27.71,139.33,118.95,4,0
+sports,4899,bills and utilities,106.36,42.85,56.8,57.41,11,1
+sports,5815,shopping,67.14,58.68,52.38,58.6,9,0
+spp warszawa,7523,fuel & automotive,91.78,114.08,355.0,0.0,2,0
+sqsp,7372,professional services,105.98,65.75,113.8,173.44,6,1
+sqsp websit,7372,professional services,114.73,58.53,59.33,52.07,7,1
+sqsp worksp,7372,professional services,113.02,51.04,96.5,16.38,5,1
+starbucks,5814,restaurants & dining,54.04,40.05,148.67,158.8,4,0
+subway,5814,restaurants & dining,80.5,69.88,30.0,0.0,2,0
+sumup taxi,4121,transport & taxis,58.82,20.69,111.0,0.0,2,0
+supercenter,5411,groceries,101.2,77.31,85.57,124.38,8,0
+superdrug stores plc,5912,health & pharmacy,114.6,61.37,174.0,0.0,2,0
+sziget fesztiva,7999,entertainment & leisure,93.2,24.18,114.0,0.0,2,0
+takside,4121,transport & taxis,155.58,12.94,102.0,60.81,3,0
+tamoil,5542,fuel & automotive,56.1,24.77,21.0,0.0,2,0
+taxi,4121,transport & taxis,35.26,20.58,355.0,0.0,2,0
+taxiworld limited london,4121,transport & taxis,51.58,48.08,214.0,0.0,2,0
+tcl cumul,4111,transport & taxis,124.88,38.28,388.0,0.0,2,0
+tcl lyo,4111,transport & taxis,98.75,60.62,15.36,19.16,46,0
+tedi fil,5651,clothing & apparel,150.79,38.34,169.67,87.84,4,0
+tesco stores,5411,groceries,116.45,42.96,104.0,39.35,5,0
+tfl travel,4111,transport & taxis,54.64,41.52,207.5,252.44,3,0
+tfl travel charge,4111,transport & taxis,81.47,83.27,220.33,148.56,4,0
+tfl unpaid fares,4111,transport & taxis,47.86,33.44,180.0,0.0,2,0
+the home depot,5200,electronics & home,93.37,84.54,270.0,77.78,3,0
+ticket,7399,professional services,116.85,84.43,106.0,66.47,3,0
+tisseo,4111,transport & taxis,114.1,49.84,31.45,39.98,23,0
+toogoodt,5812,restaurants & dining,103.74,56.91,16.07,18.28,42,0
+total deutschland gmbh,5541,fuel & automotive,81.74,18.09,356.0,0.0,2,0
+tradeit,7993,entertainment & leisure,59.27,9.59,46.5,20.51,3,0
+transavia,3007,travel & airlines,158.94,11.44,123.0,86.27,3,0
+txw london taxi,4121,transport & taxis,60.74,52.48,104.5,91.72,5,0
+ukvi,9399,government and taxes,117.3,66.89,125.8,113.33,6,0
+union taxi,4121,transport & taxis,38.25,36.18,536.0,0.0,2,0
+uscustoms esta pmt,9399,government and taxes,102.54,64.94,96.25,66.46,5,0
+vertrieb gmbh,4112,transport & taxis,95.06,69.42,113.6,62.03,6,0
+voyo,4899,bills and utilities,90.97,52.5,86.25,74.66,9,1
+wal mart,5411,groceries,59.97,41.85,138.0,136.84,6,0
+willhaben,5331,shopping,83.25,67.83,110.17,73.52,7,0
+wizz air,3301,transport & taxis,28.87,18.91,601.0,0.0,2,0
+wow cinema,4899,bills and utilities,116.03,53.2,119.5,120.11,5,1
+wow entertai,4899,bills and utilities,68.18,67.11,23.0,0.0,2,1
+wow entertai,5815,shopping,96.42,73.15,254.5,102.53,3,0
+wow filme abo,4899,bills and utilities,91.25,96.34,328.0,0.0,2,1
+wow live spo,5815,shopping,84.17,33.8,60.0,48.08,3,0
+wow premium,4899,bills and utilities,85.42,69.78,324.0,0.0,2,1
+wow premium,5815,shopping,113.62,61.7,239.5,79.9,3,0
+wwwrohlikcz,5411,groceries,91.98,29.32,138.67,151.51,4,0
+xsolla,5816,shopping,103.21,59.31,165.25,100.99,5,0
+ytkpohja pilet,4111,transport & taxis,141.17,51.79,264.0,0.0,2,0
+zabka,5499,groceries,75.77,60.83,64.8,25.08,6,0
+zasilkovna,4215,transport & taxis,119.29,61.54,104.83,111.46,7,0
+zinzino,5499,groceries,67.13,50.18,82.25,110.93,9,0
+netflix,5815,shopping,10.00,0.00,30.00,2.00,6,1
+spotify,5815,shopping,6.99,0.00,30.00,2.00,6,1
+disney plus,5815,shopping,8.99,0.00,30.00,2.00,6,1
+youtube premium,5815,shopping,11.99,0.00,30.00,2.00,6,1
+amazon prime,5815,shopping,14.99,0.00,30.00,2.00,6,1
+icloud,5734,electronics & home,2.99,0.00,30.00,2.00,6,1
+google one,5734,electronics & home,1.99,0.00,30.00,2.00,6,1
+adobe,5734,electronics & home,19.99,0.00,30.00,2.00,6,1
+canva,7399,professional services,12.99,0.00,30.00,2.00,6,1
+chatgpt plus,7372,professional services,20.00,0.00,30.00,2.00,6,1
+zoom,7372,professional services,15.99,0.00,30.00,2.00,6,1
+dropbox plus,4816,bills and utilities,11.99,0.00,30.00,2.00,6,1
+notion,7372,professional services,10.00,0.00,30.00,2.00,6,1
+microsoft 365,5045,electronics & home,6.99,0.00,30.00,2.00,6,1
+norton subscription,5817,shopping,9.99,0.00,30.00,2.00,6,1
+avast subscription,5817,shopping,7.99,0.00,30.00,2.00,6,1
+netflix,5815,shopping,10.00,0.00,30.00,2.00,12,1
+spotify,5815,shopping,6.99,0.00,30.00,2.00,12,1
+disney plus,5815,shopping,8.99,0.00,30.00,2.00,12,1
+youtube premium,5815,shopping,11.99,0.00,30.00,2.00,12,1
+amazon prime,5815,shopping,14.99,0.00,30.00,2.00,12,1
+icloud,5734,electronics & home,2.99,0.00,30.00,2.00,12,1
+google one,5734,electronics & home,1.99,0.00,30.00,2.00,12,1
+adobe,5734,electronics & home,19.99,0.00,30.00,2.00,12,1
+canva,7399,professional services,12.99,0.00,30.00,2.00,12,1
+chatgpt plus,7372,professional services,20.00,0.00,30.00,2.00,12,1
+zoom,7372,professional services,15.99,0.00,30.00,2.00,12,1
+notion,7372,professional services,10.00,0.00,30.00,2.00,12,1
+microsoft 365,5045,electronics & home,6.99,0.00,30.00,2.00,12,1
+norton subscription,5817,shopping,9.99,0.00,30.00,2.00,12,1
+avast subscription,5817,shopping,7.99,0.00,30.00,2.00,12,1
+amazon repeated,5399,shopping,80.00,45.00,30.00,25.00,12,0
+carrefour repeated,5411,groceries,65.00,35.00,7.00,5.00,20,0
+uber repeated,4121,transport & taxis,18.00,12.00,5.00,4.00,30,0
+bolt repeated,4121,transport & taxis,16.00,10.00,6.00,5.00,25,0
+starbucks repeated,5814,restaurants & dining,8.00,5.00,4.00,3.00,40,0
+netflix,5815,shopping,10,0,30,1,12,1
+spotify,5815,shopping,6.99,0,30,1,12,1
+youtube premium,5815,shopping,11.99,0,30,1,10,1
+apple music,5815,shopping,9.99,0,30,1,8,1
+chatgpt plus,5815,shopping,20,0,30,1,6,1
+adobe,5734,electronics & home,19.99,0,30,1,12,1
+dropbox,4816,bills and utilities,11.99,0,30,1,8,1
+google one,4816,bills and utilities,2.99,0,30,1,10,1
+icloud,4816,bills and utilities,0.99,0,30,1,12,1
+amazon prime,5815,shopping,14.99,0,30,1,8,1
+disney plus,5815,shopping,8.99,0,30,1,7,1
+shahid vip,5815,shopping,6.99,0,30,1,6,1
+norton,5817,shopping,59.99,0,365,3,3,1
+avast,5817,shopping,49.99,0,365,3,3,1
+carrefour,5411,groceries,85,45,7,8,20,0
+bolt,4121,transport & taxis,18,10,2,3,25,0
+uber,4121,transport & taxis,20,15,2,4,30,0
+mcdonalds,5814,restaurants & dining,14,7,5,7,15,0
+zara,5651,clothing & apparel,120,70,90,60,6,0
+shell,5541,fuel & automotive,65,40,7,5,20,0
+taxi,4121,transport & taxis,12,9,3,2,18,0
+restaurant,5812,restaurants & dining,35,20,6,4,16,0
+amazon shopping,5399,shopping,75,50,14,20,12,0
+hm,5651,clothing & apparel,90,45,120,80,5,0
+nike,5651,clothing & apparel,110,55,140,90,4,0
