@@ -14,3 +14,10 @@ venv/
 
 # Logs
 *.log
+
+#firebase 
+backend/firebase-service-account.json
+firebase-login-test.html
+
+#access-control
+backend/config/access_control.csv
