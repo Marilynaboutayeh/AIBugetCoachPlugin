@@ -5,6 +5,7 @@ from fastapi import FastAPI, Depends
 from app.core.db import engine, Base
 from app.api.transactions import router as transactions_router
 from app.api.insights import router as insights_router
+from app.api.forecast import router as forecast_router
 from app.models.transaction import Transaction
 from app.core.firebase import initialize_firebase
 from app.api import chat
@@ -73,4 +74,5 @@ def user_access_test(
 
 app.include_router(transactions_router)
 app.include_router(insights_router)
+app.include_router(forecast_router)
 app.include_router(chat.router)
