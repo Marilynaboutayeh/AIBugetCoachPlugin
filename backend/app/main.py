@@ -1,5 +1,17 @@
+from pathlib import Path
 from dotenv import load_dotenv
-load_dotenv()
+import os
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+ENV_PATH = BASE_DIR / ".env"
+
+print("ENV PATH:", ENV_PATH)
+print("ENV FILE EXISTS:", ENV_PATH.exists())
+
+load_dotenv(ENV_PATH, override=True)
+
+print("MAIN OPENAI KEY EXISTS:", bool(os.getenv("OPENAI_API_KEY")))
+
 from fastapi import FastAPI, Depends
 
 from app.core.db import engine, Base
@@ -17,7 +29,7 @@ from app.core.security import (
     check_user_access
 )
 
-load_dotenv()
+
 
 # Initialize Firebase Admin SDK
 initialize_firebase()
