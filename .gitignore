@@ -20,4 +20,4 @@ backend/firebase-service-account.json
 firebase-login-test.html
 
 #access-control
-backend/config/access_control.csv
+# backend/config/access_control.csv
