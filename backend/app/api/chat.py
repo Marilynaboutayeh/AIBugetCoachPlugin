@@ -1,6 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+import re
 
 import joblib
 import pandas as pd
@@ -110,6 +111,37 @@ def _resolve_chat_user_id(
         )
 
     return get_authenticated_anon_user_id(current_user)
+
+
+def _reject_cross_user_question(
+    question: Optional[str],
+    resolved_user_id: str,
+    current_user: dict,
+) -> None:
+    """
+    Rejects normal users if their free-text question tries to access
+    another anonymized user_id such as user_2 or anon_123.
+
+    Admin users are allowed because their access is controlled through target_user_id.
+    """
+
+    if not question:
+        return
+
+    if is_admin_user(current_user):
+        return
+
+    mentioned_user_ids = re.findall(
+        r"\b(user_\d+|anon_\d+)\b",
+        question.lower(),
+    )
+
+    for mentioned_user_id in mentioned_user_ids:
+        if mentioned_user_id != resolved_user_id.lower():
+            raise HTTPException(
+                status_code=403,
+                detail="You are not authorized to access another user's data.",
+            )
 
 
 def _add_recurring_context(
@@ -359,6 +391,7 @@ def chat_query(
 
     Data flow:
     - Resolve user
+    - Reject cross-user questions for normal users
     - Detect intent
     - Build chatbot context from insights and forecast components
     - Build deterministic base answer
@@ -369,6 +402,13 @@ def chat_query(
     resolved_user_id = _resolve_chat_user_id(
         current_user=current_user,
         target_user_id=request.target_user_id,
+    )
+
+    # 1.1 Reject normal users trying to ask about another anonymized user
+    _reject_cross_user_question(
+        question=request.question,
+        resolved_user_id=resolved_user_id,
+        current_user=current_user,
     )
 
     # 2. Resolve intent
