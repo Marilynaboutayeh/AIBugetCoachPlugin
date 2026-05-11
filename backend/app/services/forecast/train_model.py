@@ -49,7 +49,7 @@ def train_forecast_model():
     model_pipeline = Pipeline(
         steps=[
             ("preprocessor", preprocessor),
-            ("model", LogisticRegression(max_iter=1000)),
+            ("model", LogisticRegression(max_iter=1000, class_weight="balanced")),
         ]
     )
 

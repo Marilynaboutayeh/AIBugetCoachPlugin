@@ -36,6 +36,33 @@ def get_recurring_candidates(user_id: str, db: Session = Depends(get_db)) -> Dic
         prediction = model.predict(features_df)[0]
         confidence = model.predict_proba(features_df)[0][1]
 
+        if int(prediction) == 1:
+            if confidence >= 0.90:
+                confidence_level = "very_high"
+                ai_message = (
+                    f"AI forecast: {candidate['merchant']} is very likely to be a recurring payment. "
+                    f"This prediction is based on a repeated transaction pattern with very high AI confidence."
+                )
+            elif confidence >= 0.75:
+                confidence_level = "high"
+                ai_message = (
+                    f"AI forecast: {candidate['merchant']} is likely to be a recurring payment. "
+                    f"This prediction is based on similar timing and amount patterns."
+                )
+            else:
+                confidence_level = "medium"
+                ai_message = (
+                    f"AI forecast: {candidate['merchant']} may be a recurring payment, "
+                    f"but the confidence is not high enough to fully rely on it."
+                )
+        else:
+            confidence_level = "low"
+            ai_message = (
+                f"AI forecast: {candidate['merchant']} was detected as a repeated transaction pattern, "
+                f"but the ML model does not classify it as a recurring payment. "
+                f"It should be reviewed manually."
+            )
+
         public_candidates.append(
             {
                 "merchant": candidate["merchant"],
@@ -46,6 +73,8 @@ def get_recurring_candidates(user_id: str, db: Session = Depends(get_db)) -> Dic
                 "features": features,
                 "ml_prediction_is_recurring": int(prediction),
                 "ml_confidence": round(float(confidence), 4),
+                "confidence_level": confidence_level,
+                "ai_message": ai_message,
             }
         )
 
